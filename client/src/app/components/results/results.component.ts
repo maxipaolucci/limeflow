@@ -19,6 +19,7 @@ export class ResultsComponent implements OnInit {
   constructor(private vottingActions: VottingActions) {}
 
   ngOnInit() {
+    //subscribe to vote observable and populate pair and tally.
     this.vote.subscribe(vote => {
       if (vote) {
         this.votePair = vote.get('pair');
@@ -27,6 +28,9 @@ export class ResultsComponent implements OnInit {
     });
   }
 
+  /**
+   * next button handler
+   */
   next() {
     this.vottingActions.next();
   }
