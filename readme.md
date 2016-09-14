@@ -11,6 +11,7 @@ Another boilerplate to start developing web applications without loose time doin
 ###The client includes by default:
 * Angular 2
 * Redux (ng2-redux, DevToolsExtension, redux-logger)
+* ng2-redux-router
 * Bootstrap 3
 * Gulp for building tasks.
 * Webpack to bundle resources and serve the webapp.
@@ -20,7 +21,7 @@ Another boilerplate to start developing web applications without loose time doin
 
 ##Setup
 
-1) run `>git clone http://github.com/maxipaolucci/startupJSwithAngular.git`
+1) run `>git clone https://github.com/maxipaolucci/startupJSwithAngular2Redux.git`
 
 2) Install node and npm in your pc (to check if you already have it installed do `>npm --version`  and  `>node --version`)
 
