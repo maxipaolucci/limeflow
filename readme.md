@@ -1,4 +1,4 @@
-#StartupJS with Angular
+#StartupJS with Angular 2 and Redux
 
 Another boilerplate to start developing web applications without loose time doing server and client configuration. Go directly to the core and avoid the boring stuff.
 
@@ -31,6 +31,8 @@ Another boilerplate to start developing web applications without loose time doin
 3.1) Go to server directory and run `>npm install`
 
 3.2) Start the server doing: `>npm run start`  (the server runs in port 3030)
+
+3.3) Run server test cases: `>npm run test` (or test:watch to start the tests watcher in dev mode)
 
 
 ###Client Setup
