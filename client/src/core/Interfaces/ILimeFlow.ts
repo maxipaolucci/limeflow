@@ -1,11 +1,15 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-module Core.Interfaces {
+namespace Core.Interfaces {
   export interface ILimeFlow {
 
-    addState(State : Core.IState);
-    addLink(Link : Core.Link);
+    getId() : string;
+    getName() : string;
 
+    addState(State : Core.Interfaces.IState) : boolean;
+    addLink(Link : Core.Interfaces.ILink) : boolean;
+
+    toString() : string;
   }
 }

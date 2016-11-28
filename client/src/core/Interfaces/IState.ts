@@ -1,18 +1,29 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-module Core.Interfaces {
+namespace Core.Interfaces {
+
   export interface IState {
 
-    setId(string) : void;
-    setName(name : String) : void;
-
     getId() : string;
-    getName() : string;
-    getInputs() : Core.Interfaces.ILink[];
-    getOutputs() : Core.Interfaces.ILink[];
+    getInputs() : Array<Core.Interfaces.ILink>;
+    getOutputs() : Array<Core.Interfaces.ILink>;
+    getStatus() : Core.Constants.Status;
+    getTasks() : Array<Core.Interfaces.ITask>;
+
     isFinal() : boolean;
     isInitial() : boolean;
-    getStatus() : Core.Constants.Status;
+    isComplete() : boolean;
+    isDone() : boolean;
+
+    registerInput(link : Core.Interfaces.ILink) : void;
+    registerOutput(link : Core.Interfaces.ILink) : void;
+    registerTask(task : Core.Interfaces.ITask) : void;
+
+    setInitial(initial : boolean) : void;
+    setFinal(final : boolean) : void;
+    setStatus(status : Core.Constants.Status) : void;
+
+    toString() : string;
   }
 }

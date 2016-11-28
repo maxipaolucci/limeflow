@@ -1,7 +1,7 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-module Core.Interfaces {
+namespace Core.Interfaces {
   export interface ILink {
 
     setId(string) : void;
@@ -14,5 +14,7 @@ module Core.Interfaces {
     getCaption() : string;
     getOrigin() : Core.Interfaces.IState;
     getDestiny() : Core.Interfaces.IState;
+
+    toString() : string;
   }
 }
