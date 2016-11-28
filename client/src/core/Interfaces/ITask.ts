@@ -7,12 +7,12 @@ namespace Core.Interfaces {
     getId() : string;
     isRequired() : boolean;
     getState() : Core.Interfaces.IState;
-    getStatus() : Core.Constants.Status;
+    getStatus() : number;
 
     setComplete() : void
     setRequired(required : boolean) : void;
     setState(state : Core.Interfaces.IState) : void;
-    setStatus(status : Core.Constants.Status) : void;
+    setStatus(status : number) : void;
 
     toString() : string;
   }

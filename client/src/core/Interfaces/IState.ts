@@ -8,7 +8,7 @@ namespace Core.Interfaces {
     getId() : string;
     getInputs() : Array<Core.Interfaces.ILink>;
     getOutputs() : Array<Core.Interfaces.ILink>;
-    getStatus() : Core.Constants.Status;
+    getStatus() : number;
     getTasks() : Array<Core.Interfaces.ITask>;
 
     isFinal() : boolean;

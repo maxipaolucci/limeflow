@@ -36,7 +36,7 @@ namespace Core {
       return this._state;
     }
 
-    public getStatus() : Core.Constants.Status {
+    public getStatus() : number {
       return this._status;
     }
 
@@ -67,7 +67,7 @@ namespace Core {
       }
     }
 
-    public setStatus(status : Core.Constants.Status) {
+    public setStatus(status : number) {
       if (this._status !== Core.Constants.Status.Complete) {
         this._status = status;
         if (this._state) {

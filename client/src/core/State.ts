@@ -10,7 +10,7 @@ namespace Core {
     private _description : string;
     private _initial : boolean;
     private _final : boolean;
-    private _status : Core.Constants.Status;
+    private _status : number;
     private _inputs : Array<Core.Link>;
     private _outputs : Array<Core.Link>;
     private _tasks : Array<Core.Task>;
@@ -21,7 +21,7 @@ namespace Core {
       this._description = description || null;
       this._initial = false;
       this._final = false;
-      this._status = Core.Constants.Status.New;
+      this._status = Core.Constants.Status.Empty;
       this._inputs = Array<Core.Link>();
       this._outputs = Array<Core.Link>();
       this._tasks = Array<Core.Task>();
@@ -47,7 +47,7 @@ namespace Core {
       return this._outputs;
     }
 
-    public getStatus() : Core.Constants.Status {
+    public getStatus() : number {
       return this._status;
     }
 
@@ -107,19 +107,20 @@ namespace Core {
      */
     public updateStatus() : void {
       let countTasks : number = this._tasks.length;
-      let tasksStatuses : {[key : any] : Core.Interfaces.ITask} = {};
+      let tasksStatuses : {[key : number] : Array<Core.Task>} = {};
       if (countTasks) {
-        for (let task : Core.Task in this._tasks) {
-          tasksStatuses[task.getStatus()] = task;
+        for (let task of this._tasks) {
+          let _task : Core.Task = <Core.Task>task;
+          tasksStatuses[_task.getStatus()].push(_task);
         }
 
         if (Object.keys(tasksStatuses).length === 1) {
           //all the tasks are in the same status so the state is in the same status of its tasks
-          this._status = (Core.Constants.Status)Object.keys(tasksStatuses)[0];
+          this._status = parseInt(Object.keys(tasksStatuses)[0]);
           return;
         }
 
-        if (tasksStatuses[Core.Constants.Status.New].length) {
+        if (tasksStatuses[Core.Constants.Status.New] && tasksStatuses[Core.Constants.Status.New].length) {
           //if it has some tasks new...
           let tasks = tasksStatuses[Core.Constants.Status.New]
             .filter((task : Core.Task) => task.isRequired());
@@ -133,7 +134,7 @@ namespace Core {
           this._status = Core.Constants.Status.Done;
         }
 
-        if (tasksStatuses[Core.Constants.Status.InProgress].length) {
+        if (tasksStatuses[Core.Constants.Status.InProgress] && tasksStatuses[Core.Constants.Status.InProgress].length) {
           //if it has some tasks inProgress...
           let tasks = tasksStatuses[Core.Constants.Status.InProgress]
               .filter((task : Core.Task) => task.isRequired());
@@ -147,7 +148,7 @@ namespace Core {
           this._status = Core.Constants.Status.Done
         }
 
-        if (tasksStatuses[Core.Constants.Status.Done].length) {
+        if (tasksStatuses[Core.Constants.Status.Done] && tasksStatuses[Core.Constants.Status.Done].length) {
           //there are tasks done but not all of them
           this._status = Core.Constants.Status.Done;
           return;

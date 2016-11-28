@@ -9,6 +9,7 @@ namespace Core {
     private _description : string;
     private _states : Core.Interfaces.IState[];
     private _links : Core.Interfaces.ILink[];
+    private _status : number;
 
     constructor(id : string, name : string, description? : string) {
       this._id = id;
@@ -16,6 +17,7 @@ namespace Core {
       this._description = description || null;
       this._states = [];
       this._links = [];
+      this._status = Core.Constants.Status.Empty;
     }
 
     public addLink(link : Core.Interfaces.ILink) {
@@ -43,6 +45,10 @@ namespace Core {
       return this._name;
     }
 
+    public getStatus() {
+      return this._status;
+    }
+
     public toString() {
       let limeFlowStr = `LIMEFLOW ${this._id}: ${this._name}`;
       for (let state in this._states) {
@@ -53,6 +59,10 @@ namespace Core {
       }
 
       return limeFlowStr;
+    }
+
+    public updateStatus() : void {
+      //todo update status like in state class
     }
   }
 }
