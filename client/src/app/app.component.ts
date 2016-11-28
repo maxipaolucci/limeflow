@@ -13,6 +13,7 @@ import reduxLogger from '../model/configureLogger';
 import { __DEVMODE__ } from "../constants/config";
 import {VottingActions} from "./vottingActions.service";
 import {VottingMiddleware} from "./vottingMiddleware.service";
+import LimeFlow = Core.LimeFlow;
 
 
 @Component({
@@ -63,4 +64,10 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.socket.on('state', (state : any) => this.vottingActions.setState(state) ); //set a callback for 'state' events in socket
   }
+
+  createLimeFlows() {
+    let flow1 = new LimeFlow('flow1', 'This is the flow 1');
+
+  }
+
 }

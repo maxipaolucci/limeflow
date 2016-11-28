@@ -6,6 +6,7 @@ namespace Core.Constants {
     New = 1,
     InProgress,
     Done,
-    Complete
+    Complete,
+    Empty
   }
 }

@@ -7,10 +7,10 @@ namespace Core {
 
     private _id : string;
     private _caption : string;
-    private _origin : Core.Interfaces.IState;
-    private _destiny : Core.Interfaces.IState;
+    private _origin : Core.State;
+    private _destiny : Core.State;
 
-    constructor(id : string, origin : Core.Interfaces.IState, destiny : Core.Interfaces.IState) {
+    constructor(id : string, origin : Core.State, destiny : Core.State) {
       this._id = id;
       this._origin = origin;
       this._destiny = destiny;
@@ -28,7 +28,7 @@ namespace Core {
       this._caption = caption;
     }
 
-    public setOrigin(state: Core.Interfaces.IState): boolean {
+    public setOrigin(state: Core.State): boolean {
       if (state) {
         this._origin = state;
         this._origin.registerOutput(this);
@@ -39,7 +39,7 @@ namespace Core {
       return false;
     }
 
-    public setDestiny(state: Core.Interfaces.IState): boolean {
+    public setDestiny(state: Core.State): boolean {
       if (state) {
         this._origin = state;
         this._destiny.registerInput(this);
@@ -50,7 +50,7 @@ namespace Core {
       return false;
     }
 
-    public setStates(origin: Core.Interfaces.IState, destiny: Core.Interfaces.IState): boolean {
+    public setStates(origin: Core.State, destiny: Core.State): boolean {
       if (origin && destiny) {
         this._origin = origin;
         this._destiny = destiny;
@@ -71,11 +71,11 @@ namespace Core {
       return this._caption;
     }
 
-    public getOrigin(): Core.Interfaces.IState {
+    public getOrigin(): Core.State {
       return this._origin;
     }
 
-    public getDestiny(): Core.Interfaces.IState {
+    public getDestiny(): Core.State {
       return this._destiny;
     }
 

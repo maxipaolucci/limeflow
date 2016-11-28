@@ -22,7 +22,7 @@ namespace Core.Interfaces {
 
     setInitial(initial : boolean) : void;
     setFinal(final : boolean) : void;
-    setStatus(status : Core.Constants.Status) : void;
+    updateStatus() : void;
 
     toString() : string;
   }

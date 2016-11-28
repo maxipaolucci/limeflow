@@ -6,11 +6,13 @@ namespace Core.Interfaces {
 
     getId() : string;
     isRequired() : boolean;
+    getState() : Core.Interfaces.IState;
     getStatus() : Core.Constants.Status;
 
-    setRequired(required : boolean) : void;
-    setStatus(status : Core.Constants.Status) : void;
     setComplete() : void
+    setRequired(required : boolean) : void;
+    setState(state : Core.Interfaces.IState) : void;
+    setStatus(status : Core.Constants.Status) : void;
 
     toString() : string;
   }

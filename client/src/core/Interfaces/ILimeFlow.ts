@@ -7,8 +7,8 @@ namespace Core.Interfaces {
     getId() : string;
     getName() : string;
 
-    addState(State : Core.Interfaces.IState) : boolean;
-    addLink(Link : Core.Interfaces.ILink) : boolean;
+    addState(State : Core.Interfaces.IState) : void;
+    addLink(Link : Core.Interfaces.ILink) : void;
 
     toString() : string;
   }

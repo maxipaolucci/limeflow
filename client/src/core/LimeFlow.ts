@@ -2,13 +2,13 @@
  * Created by Maxi Paolucci on 27/11/2016.
  */
 namespace Core {
-  export abstract class LimeFlow implements Core.Interfaces.ILimeFlow {
+  export class LimeFlow implements Core.Interfaces.ILimeFlow {
 
     private _id : string = null;
     private _name : string = null;
     private _description : string;
-    private _states : Core.State[];
-    private _links : Core.Link[];
+    private _states : Core.Interfaces.IState[];
+    private _links : Core.Interfaces.ILink[];
 
     constructor(id : string, name : string, description? : string) {
       this._id = id;
@@ -18,12 +18,21 @@ namespace Core {
       this._links = [];
     }
 
-    public addLink(link : Core.Link) {
-      this._links.push(link);
+    public addLink(link : Core.Interfaces.ILink) {
+      if (link) {
+        this._links.push(link);
+      } else {
+        console.warn('LimeFlow: addLink() - link param is empty or null');
+      }
+
     }
 
-    public addState(state : Core.State) {
-      this._states.push(state);
+    public addState(state : Core.Interfaces.IState) {
+      if (state) {
+        this._states.push(state);
+      } else {
+        console.warn('LimeFlow: addState() - state param is empty or null');
+      }
     }
 
     public getId() {

@@ -3,7 +3,7 @@
  */
 namespace Core {
 
-  export abstract class State implements Core.Interfaces.IState {
+  export class State implements Core.Interfaces.IState {
 
     private _id : string = null;
     private _name : string;
@@ -11,9 +11,9 @@ namespace Core {
     private _initial : boolean;
     private _final : boolean;
     private _status : Core.Constants.Status;
-    private _inputs : Array<Core.Interfaces.ILink>;
-    private _outputs : Array<Core.Interfaces.ILink>;
-    private _tasks : Array<Core.Interfaces.ITask>;
+    private _inputs : Array<Core.Link>;
+    private _outputs : Array<Core.Link>;
+    private _tasks : Array<Core.Task>;
 
     constructor(id : string, name? : string, description? : string) {
       this._id = id;
@@ -22,9 +22,9 @@ namespace Core {
       this._initial = false;
       this._final = false;
       this._status = Core.Constants.Status.New;
-      this._inputs = Array<Core.Interfaces.ILink>();
-      this._outputs = Array<Core.Interfaces.ILink>();
-      this._tasks = Array<Core.Interfaces.ITask>();
+      this._inputs = Array<Core.Link>();
+      this._outputs = Array<Core.Link>();
+      this._tasks = Array<Core.Task>();
     }
 
     public getDescription() : string {
@@ -35,7 +35,7 @@ namespace Core {
       return this._id;
     }
 
-    public getInputs() : Array<Core.Interfaces.ILink> {
+    public getInputs() : Array<Core.Link> {
       return this._inputs;
     }
 
@@ -43,7 +43,7 @@ namespace Core {
       return this._name;
     }
 
-    public getOutputs() : Array<Core.Interfaces.ILink> {
+    public getOutputs() : Array<Core.Link> {
       return this._outputs;
     }
 
@@ -51,7 +51,7 @@ namespace Core {
       return this._status;
     }
 
-    public getTasks() : Array<Core.Interfaces.ITask> {
+    public getTasks() : Array<Core.Task> {
       return this._tasks;
     }
 
@@ -71,16 +71,17 @@ namespace Core {
       return this._status === Core.Constants.Status.Done || this._status === Core.Constants.Status.Complete;
     }
 
-    public registerInput(link : Core.Interfaces.ILink) : void {
+    public registerInput(link : Core.Link) : void {
       this._inputs.push(link);
     }
 
-    public registerOutput(link : Core.Interfaces.ILink) : void {
+    public registerOutput(link : Core.Link) : void {
       this._outputs.push(link);
     }
 
-    public registerTask(task : Core.Interfaces.ITask) {
+    public registerTask(task : Core.Task) {
       this._tasks.push(task);
+      this.updateStatus();
     }
 
     public setDescription(description : string) : void {
@@ -99,8 +100,63 @@ namespace Core {
       this._name = name;
     }
 
-    public setStatus(status : Core.Constants.Status) : void {
-      //todo this depends on the state of its tasks
+    /**
+     * This methods iterates the tasks in the state an set the global status of the state besed
+     * on the status of its tasks.
+     * @param status
+     */
+    public updateStatus() : void {
+      let countTasks : number = this._tasks.length;
+      let tasksStatuses : {[key : any] : Core.Interfaces.ITask} = {};
+      if (countTasks) {
+        for (let task : Core.Task in this._tasks) {
+          tasksStatuses[task.getStatus()] = task;
+        }
+
+        if (Object.keys(tasksStatuses).length === 1) {
+          //all the tasks are in the same status so the state is in the same status of its tasks
+          this._status = (Core.Constants.Status)Object.keys(tasksStatuses)[0];
+          return;
+        }
+
+        if (tasksStatuses[Core.Constants.Status.New].length) {
+          //if it has some tasks new...
+          let tasks = tasksStatuses[Core.Constants.Status.New]
+            .filter((task : Core.Task) => task.isRequired());
+          if (tasks.length) {
+            //if any of those new is required then set inProgress
+            this._status = Core.Constants.Status.InProgress;
+            return;
+          }
+
+          //set as done but continue evaluating...
+          this._status = Core.Constants.Status.Done;
+        }
+
+        if (tasksStatuses[Core.Constants.Status.InProgress].length) {
+          //if it has some tasks inProgress...
+          let tasks = tasksStatuses[Core.Constants.Status.InProgress]
+              .filter((task : Core.Task) => task.isRequired());
+          if (tasks.length) {
+            //if any of those inProgress is required then set inProgress
+            this._status = Core.Constants.Status.InProgress;
+            return;
+          }
+
+          //if all the inProgress tasks are not required then set as done
+          this._status = Core.Constants.Status.Done
+        }
+
+        if (tasksStatuses[Core.Constants.Status.Done].length) {
+          //there are tasks done but not all of them
+          this._status = Core.Constants.Status.Done;
+          return;
+        }
+
+      } else {
+        this._status = Core.Constants.Status.Empty;
+        return;
+      }
     }
 
     public toString() : string {
