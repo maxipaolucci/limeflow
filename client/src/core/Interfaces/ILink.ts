@@ -1,20 +1,22 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-namespace Core.Interfaces {
-  export interface ILink {
+import IState from "./IState";
 
-    setId(id : string) : void;
-    setCaption(caption : string) : void;
-    setOrigin(state : Core.Interfaces.IState) : boolean;
-    setDestiny(state : Core.Interfaces.IState) : boolean;
-    setStates(origin : Core.Interfaces.IState, destiny : Core.Interfaces.IState) : boolean;
+interface ILink {
 
-    getId() : string;
-    getCaption() : string;
-    getOrigin() : Core.Interfaces.IState;
-    getDestiny() : Core.Interfaces.IState;
+  setId(id : string) : void;
+  setCaption(caption : string) : void;
+  setOrigin(state : IState) : boolean;
+  setDestiny(state : IState) : boolean;
+  setStates(origin : IState, destiny : IState) : boolean;
 
-    toString() : string;
-  }
+  getId() : string;
+  getCaption() : string;
+  getOrigin() : IState;
+  getDestiny() : IState;
+
+  toString() : string;
 }
+
+export default ILink;

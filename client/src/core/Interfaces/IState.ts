@@ -1,29 +1,32 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-namespace Core.Interfaces {
 
-  export interface IState {
+import ITask from "./ITask";
+import ILink from "./ILink";
 
-    getId() : string;
-    getInputs() : Array<Core.Interfaces.ILink>;
-    getOutputs() : Array<Core.Interfaces.ILink>;
-    getStatus() : number;
-    getTasks() : Array<Core.Interfaces.ITask>;
+interface IState {
 
-    isFinal() : boolean;
-    isInitial() : boolean;
-    isComplete() : boolean;
-    isDone() : boolean;
+  getId() : string;
+  getInputs() : Array<ILink>;
+  getOutputs() : Array<ILink>;
+  getStatus() : number;
+  getTasks() : Array<ITask>;
 
-    registerInput(link : Core.Interfaces.ILink) : void;
-    registerOutput(link : Core.Interfaces.ILink) : void;
-    registerTask(task : Core.Interfaces.ITask) : void;
+  isFinal() : boolean;
+  isInitial() : boolean;
+  isComplete() : boolean;
+  isDone() : boolean;
 
-    setInitial(initial : boolean) : void;
-    setFinal(final : boolean) : void;
-    updateStatus() : void;
+  registerInput(link : ILink) : void;
+  registerOutput(link : ILink) : void;
+  registerTask(task : ITask) : void;
 
-    toString() : string;
-  }
+  setInitial(initial : boolean) : void;
+  setFinal(final : boolean) : void;
+  updateStatus() : void;
+
+  toString() : string;
 }
+
+export default IState;

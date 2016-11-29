@@ -13,7 +13,7 @@ import reduxLogger from '../model/configureLogger';
 import { __DEVMODE__ } from "../constants/config";
 import {VottingActions} from "./vottingActions.service";
 import {VottingMiddleware} from "./vottingMiddleware.service";
-import LimeFlow = Core.LimeFlow;
+import LimeFlow from "../core/LimeFlow";
 
 
 @Component({
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
 
   createLimeFlows() {
     let flow1 = new LimeFlow('flow1', 'This is the flow 1');
-
+    console.log(flow1.toString());
   }
 
 }

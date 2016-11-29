@@ -1,18 +1,21 @@
+import ILink from "./ILink";
+import IState from "./IState";
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-namespace Core.Interfaces {
-  export interface ILimeFlow {
 
-    getId() : string;
-    getName() : string;
-    getStatus() : number,
+interface ILimeFlow {
 
-    addState(State : Core.Interfaces.IState) : void;
-    addLink(Link : Core.Interfaces.ILink) : void;
+  getId() : string;
+  getName() : string;
+  getStatus() : number,
 
-    updateStatus() : void;
+  addState(State : IState) : void;
+  addLink(Link : ILink) : void;
 
-    toString() : string;
-  }
+  updateStatus() : void;
+
+  toString() : string;
 }
+
+export default ILimeFlow;

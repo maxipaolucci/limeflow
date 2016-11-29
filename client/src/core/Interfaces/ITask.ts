@@ -1,19 +1,21 @@
 /**
  * Created by mpaoluc on 28/11/2016.
  */
-namespace Core.Interfaces {
-  export interface ITask {
+import IState from "./IState";
 
-    getId() : string;
-    isRequired() : boolean;
-    getState() : Core.Interfaces.IState;
-    getStatus() : number;
+interface ITask {
 
-    setComplete() : void
-    setRequired(required : boolean) : void;
-    setState(state : Core.Interfaces.IState) : void;
-    setStatus(status : number) : void;
+  getId() : string;
+  isRequired() : boolean;
+  getState() : IState;
+  getStatus() : number;
 
-    toString() : string;
-  }
+  setComplete() : void
+  setRequired(required : boolean) : void;
+  setState(state : IState) : void;
+  setStatus(status : number) : void;
+
+  toString() : string;
 }
+
+export default ITask;
