@@ -63,6 +63,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.socket.on('state', (state : any) => this.vottingActions.setState(state) ); //set a callback for 'state' events in socket
+    this.createLimeFlows();
   }
 
   createLimeFlows() {
