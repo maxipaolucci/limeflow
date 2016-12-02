@@ -114,8 +114,7 @@ class State implements IState {
     let tasksStatuses : {[key : number] : Array<Task>} = {};
     if (countTasks) {
       for (let task of this._tasks) {
-        let _task : Task = <Task>task;
-        tasksStatuses[_task.getStatus()].push(_task);
+        tasksStatuses[task.getStatus()].push(task);
       }
 
       if (Object.keys(tasksStatuses).length === 1) {
@@ -165,7 +164,16 @@ class State implements IState {
   }
 
   public toString() : string {
-    return `STATE ${this._id}: ${this._name} - Status: ${this._status}`
+    return `STATE ${this._id}: ${this._name} - Status: ${Status[this._status]}`
+  }
+
+  public toJSON() : any {
+    return {
+      data : {
+        id: this._id,
+        caption: this._name
+      }
+    };
   }
 }
 

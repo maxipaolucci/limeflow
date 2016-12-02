@@ -2,29 +2,29 @@
  * Created by Maxi Paolucci on 27/11/2016.
  */
 import ILimeFlow from './Interfaces/ILimeFlow';
-import IState from "./Interfaces/IState";
-import ILink from "./Interfaces/ILink";
 import Status from "./Constants/Status";
+import State from "./State";
+import Link from "./Link";
 
 class LimeFlow implements ILimeFlow {
 
   private _id : string = null;
   private _name : string = null;
   private _description : string;
-  private _states : IState[];
-  private _links : ILink[];
+  private _states : Array<State>;
+  private _links : Array<Link>;
   private _status : number;
 
   constructor(id : string, name : string, description? : string) {
     this._id = id;
     this._name = name;
     this._description = description || null;
-    this._states = [];
-    this._links = [];
+    this._states = Array<State>();
+    this._links = Array<Link>();
     this._status = Status.Empty;
   }
 
-  public addLink(link : ILink) {
+  public addLink(link : Link) {
     if (link) {
       this._links.push(link);
     } else {
@@ -33,7 +33,7 @@ class LimeFlow implements ILimeFlow {
 
   }
 
-  public addState(state : IState) {
+  public addState(state : State) {
     if (state) {
       this._states.push(state);
     } else {
@@ -54,15 +54,37 @@ class LimeFlow implements ILimeFlow {
   }
 
   public toString() {
-    let limeFlowStr = `LIMEFLOW ${this._id}: ${this._name}`;
-    for (let state in this._states) {
-      limeFlowStr += state.toString();
+    let limeFlowStr = `LIMEFLOW ${this._id}: ${this._name} \n`;
+    for (let state of this._states) {
+      limeFlowStr += `${state.toString()} \n`;
     }
-    for (let link in this._links) {
-      limeFlowStr += link.toString();
+    for (let link of this._links) {
+      limeFlowStr += `${link.toString()} \n`;
     }
 
     return limeFlowStr;
+  }
+
+  public toJSON() : any {
+    let elementsArr : Array<any> = Array<any>();
+
+    for (let state of this._states) {
+      elementsArr.push(state.toJSON());
+    }
+
+    for (let link of this._links) {
+      elementsArr.push(link.toJSON());
+    }
+
+    return {
+      container: document.getElementById('cy'),
+      elements : elementsArr
+    };
+  }
+
+  public render() {
+    let config = this.toJSON();
+    let cy = cytoscape(config);
   }
 
   public updateStatus() : void {

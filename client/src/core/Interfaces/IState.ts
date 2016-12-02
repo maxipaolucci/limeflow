@@ -27,6 +27,7 @@ interface IState {
   updateStatus() : void;
 
   toString() : string;
+  toJSON() : any;
 }
 
 export default IState;

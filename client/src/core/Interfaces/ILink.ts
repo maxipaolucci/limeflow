@@ -17,6 +17,7 @@ interface ILink {
   getDestiny() : IState;
 
   toString() : string;
+  toJSON() : any;
 }
 
 export default ILink;

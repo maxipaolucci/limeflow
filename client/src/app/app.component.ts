@@ -14,6 +14,8 @@ import { __DEVMODE__ } from "../constants/config";
 import {VottingActions} from "./vottingActions.service";
 import {VottingMiddleware} from "./vottingMiddleware.service";
 import LimeFlow from "../core/LimeFlow";
+import State from "../core/State";
+import Link from "../core/Link";
 
 
 @Component({
@@ -68,7 +70,19 @@ export class AppComponent implements OnInit {
 
   createLimeFlows() {
     let flow1 = new LimeFlow('flow1', 'This is the flow 1');
+    let s1 = new State('s1', 'State 1');
+    let s2 = new State('s2', 'State 2');
+    let s3 = new State('s3', 'State 3');
+    flow1.addState(s1);
+    flow1.addState(s2);
+    flow1.addState(s3);
+    let l1 = new Link('l1', s1, s2);
+    let l2 = new Link('l2', s2, s3, 'Link from State 2 to State 3');
+    flow1.addLink(l1);
+    flow1.addLink(l2);
     console.log(flow1.toString());
+    console.log(JSON.stringify(flow1.toJSON()));
+    flow1.render();
   }
 
 }

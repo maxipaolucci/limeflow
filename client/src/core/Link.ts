@@ -13,10 +13,11 @@ class Link implements ILink {
   private _origin : State;
   private _destiny : State;
 
-  constructor(id : string, origin : State, destiny : State) {
+  constructor(id : string, origin : State, destiny : State, caption? : string) {
     this._id = id;
     this._origin = origin;
     this._destiny = destiny;
+    this._caption = caption || null;
 
     this._origin.registerOutput(this);
     this._destiny.registerInput(this);
@@ -84,6 +85,17 @@ class Link implements ILink {
 
   public toString() : string {
     return `LINK ${this._id}: ${this._caption} - Origin: ${this._origin.getId()}, Destiny: ${this._destiny.getId()}`
+  }
+
+  public toJSON() : any {
+    return {
+      data : {
+        id : this._id,
+        source: this._origin.getId(),
+        target: this._destiny.getId(),
+        caption: this._caption || ''
+      }
+    }
   }
 }
 

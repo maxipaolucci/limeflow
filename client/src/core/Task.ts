@@ -80,7 +80,7 @@ class Task implements ITask {
   }
 
   public toString() {
-    return `TASK ${this._id}: ${this._name} - Status: ${this._status}`;
+    return `TASK ${this._id}: ${this._name} - Status: ${Status[this._status]}`;
   }
 
 }

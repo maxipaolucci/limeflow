@@ -16,6 +16,7 @@ interface ILimeFlow {
   updateStatus() : void;
 
   toString() : string;
+  toJSON() : any;
 }
 
 export default ILimeFlow;
