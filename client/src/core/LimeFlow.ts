@@ -1,6 +1,7 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
+///<reference path="../dts/cytoscape.d.ts" />
 import ILimeFlow from './Interfaces/ILimeFlow';
 import Status from "./Constants/Status";
 import State from "./State";
