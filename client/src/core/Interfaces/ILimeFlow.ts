@@ -6,17 +6,14 @@ import IState from "./IState";
 
 interface ILimeFlow {
 
+  addState(State : IState) : void;
+  addLink(Link : ILink) : void;
   getId() : string;
   getName() : string;
   getStatus() : number,
-
-  addState(State : IState) : void;
-  addLink(Link : ILink) : void;
-
-  updateStatus() : void;
-
   toString() : string;
   toJSON() : any;
+  updateStatus() : void;
 }
 
 export default ILimeFlow;

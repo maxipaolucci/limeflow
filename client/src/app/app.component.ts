@@ -16,6 +16,8 @@ import {VottingMiddleware} from "./vottingMiddleware.service";
 import LimeFlow from "../core/LimeFlow";
 import State from "../core/State";
 import Link from "../core/Link";
+import ILimeFlow from "../core/Interfaces/ILimeFlow";
+import {CytoscapeInitialisationService} from "./services/cytoscape-initialisation.service";
 
 
 @Component({
@@ -27,6 +29,7 @@ import Link from "../core/Link";
 export class AppComponent implements OnInit {
   title : string = "Voting App";
   socket : any = null;
+  flow1 : LimeFlow = null;
   // @select( (state : IAppState) => {
   //   console.log(state.vottingModel.getIn(['vote', 'pair'], List<string>()));
   //   return state.vottingModel.getIn(['vote', 'pair'], List<string>());
@@ -36,6 +39,7 @@ export class AppComponent implements OnInit {
   
   constructor(
     private titleService : Title,
+    private cytoscapeInitialisationService : CytoscapeInitialisationService,
     private ngRedux: NgRedux<IAppState>,
     private ngReduxRouter: NgReduxRouter,
     private devTools: DevToolsExtension,
@@ -69,20 +73,33 @@ export class AppComponent implements OnInit {
   }
 
   createLimeFlows() {
-    let flow1 = new LimeFlow('flow1', 'This is the flow 1');
+    this.flow1 = new LimeFlow('flow1', 'This is the flow 1');
     let s1 = new State('s1', 'State 1');
     let s2 = new State('s2', 'State 2');
     let s3 = new State('s3', 'State 3');
-    flow1.addState(s1);
-    flow1.addState(s2);
-    flow1.addState(s3);
+    this.flow1.addState(s1);
+    this.flow1.addState(s2);
+    this.flow1.addState(s3);
     let l1 = new Link('l1', s1, s2);
     let l2 = new Link('l2', s2, s3, 'Link from State 2 to State 3');
-    flow1.addLink(l1);
-    flow1.addLink(l2);
-    console.log(flow1.toString());
-    console.log(JSON.stringify(flow1.toJSON()));
-    flow1.render();
+    this.flow1.addLink(l1);
+    this.flow1.addLink(l2);
+    console.log(this.flow1.toString());
+    console.log(JSON.stringify(this.flow1.toJSON()));
+  }
+
+  ngAfterViewInit() {
+    this.render();
+  }
+
+  render() {
+    let config = {
+      elements : this.flow1.toJSON(),
+      container: this.cytoscapeInitialisationService.initContainer(),
+      style: this.cytoscapeInitialisationService.initStyleSheet(),
+      layout: this.cytoscapeInitialisationService.initLayout()
+    };
+    cytoscape(config);
   }
 
 }

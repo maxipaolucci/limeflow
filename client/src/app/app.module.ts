@@ -11,12 +11,13 @@ import {ResultsComponent} from "./components/results/results.component";
 import {routing} from "./app.routing";
 
 import '../styles.global.scss';
+import {CytoscapeInitialisationService} from "./services/cytoscape-initialisation.service";
 
 
 @NgModule({
   imports: [ BrowserModule, routing ],
   declarations: [ AppComponent, VottingComponent, VoteComponent, ResultsComponent ],
   bootstrap: [ AppComponent ],
-  providers: [ Title, NgRedux, NgReduxRouter, DevToolsExtension, VottingActions ]
+  providers: [ Title, NgRedux, NgReduxRouter, DevToolsExtension, VottingActions, CytoscapeInitialisationService ]
 })
 export class AppModule { }

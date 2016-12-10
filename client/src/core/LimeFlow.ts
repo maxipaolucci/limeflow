@@ -77,15 +77,7 @@ class LimeFlow implements ILimeFlow {
       elementsArr.push(link.toJSON());
     }
 
-    return {
-      container: document.getElementById('cy'),
-      elements : elementsArr
-    };
-  }
-
-  public render() {
-    let config = this.toJSON();
-    let cy = cytoscape(config);
+    return elementsArr;
   }
 
   public updateStatus() : void {
