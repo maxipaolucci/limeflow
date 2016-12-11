@@ -2,33 +2,20 @@
 @import "../../scss/variables";
 
 :host {
-  //vote-component
-  flex: 1 0 50%;
-  display: flex;
-
-  .vote-box {
-    flex: 1 0 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 0 10px;
-    cursor: pointer;
+  //limeFlow-component
+  #cy {
+    background-color: #F2F2F2;
+    display: block;
+    width: 900px;
+    height: 900px;
+    margin-bottom: 20px;
   }
 
-  &:last-child .vote-box {
-    margin: 10px 0 0;
-  }
 
   @media (max-width: $screen-xs-max) { }
   @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) { }
   @media (min-width: $screen-md-min) {
-    .vote-box {
-      margin: 0 10px 0 0;
-    }
 
-    &:last-child .vote-box {
-      margin: 0 0 0 10px;
-    }
   }
   @media (min-width: $screen-md-min) and (max-width: $screen-md-max) { }
   @media (min-width: $screen-lg-min) { }

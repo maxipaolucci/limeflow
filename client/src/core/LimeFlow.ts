@@ -1,20 +1,20 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-///<reference path="../dts/cytoscape.d.ts" />
+
 import ILimeFlow from './Interfaces/ILimeFlow';
 import Status from "./Constants/Status";
 import State from "./State";
 import Link from "./Link";
 
-class LimeFlow implements ILimeFlow {
+abstract class LimeFlow implements ILimeFlow {
 
-  private _id : string = null;
-  private _name : string = null;
-  private _description : string;
-  private _states : Array<State>;
-  private _links : Array<Link>;
-  private _status : number;
+  protected _id : string = null;
+  protected _name : string = null;
+  protected _description : string;
+  protected _states : Array<State>;
+  protected _links : Array<Link>;
+  protected _status : number;
 
   constructor(id : string, name : string, description? : string) {
     this._id = id;
@@ -66,19 +66,7 @@ class LimeFlow implements ILimeFlow {
     return limeFlowStr;
   }
 
-  public toJSON() : any {
-    let elementsArr : Array<any> = Array<any>();
-
-    for (let state of this._states) {
-      elementsArr.push(state.toJSON());
-    }
-
-    for (let link of this._links) {
-      elementsArr.push(link.toJSON());
-    }
-
-    return elementsArr;
-  }
+  public abstract toJSON() : any;
 
   public updateStatus() : void {
     //todo update status like in state class

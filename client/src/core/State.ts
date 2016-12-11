@@ -7,17 +7,17 @@ import Task from "./Task";
  */
 
 
-class State implements IState {
+abstract class State implements IState {
 
-  private _id : string = null;
-  private _name : string;
-  private _description : string;
-  private _initial : boolean;
-  private _final : boolean;
-  private _status : number;
-  private _inputs : Array<Link>;
-  private _outputs : Array<Link>;
-  private _tasks : Array<Task>;
+  protected _id : string = null;
+  protected _name : string;
+  protected _description : string;
+  protected _initial : boolean;
+  protected _final : boolean;
+  protected _status : number;
+  protected _inputs : Array<Link>;
+  protected _outputs : Array<Link>;
+  protected _tasks : Array<Task>;
 
   constructor(id : string, name? : string, description? : string) {
     this._id = id;
@@ -167,14 +167,7 @@ class State implements IState {
     return `STATE ${this._id}: ${this._name} - Status: ${Status[this._status]}`
   }
 
-  public toJSON() : any {
-    return {
-      data : {
-        id: this._id,
-        caption: this._name
-      }
-    };
-  }
+  public abstract toJSON() : any;
 }
 
 export default State;

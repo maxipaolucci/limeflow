@@ -1,17 +1,15 @@
-import ILink from "./Interfaces/ILink";
-import State from "./State";
-
 /**
  * Created by mpaoluc on 28/11/2016.
  */
+import ILink from "./Interfaces/ILink";
+import State from "./State";
 
+abstract class Link implements ILink {
 
-class Link implements ILink {
-
-  private _id : string;
-  private _caption : string;
-  private _origin : State;
-  private _destiny : State;
+  protected _id : string;
+  protected _caption : string;
+  protected _origin : State;
+  protected _destiny : State;
 
   constructor(id : string, origin : State, destiny : State, caption? : string) {
     this._id = id;
@@ -87,16 +85,7 @@ class Link implements ILink {
     return `LINK ${this._id}: ${this._caption} - Origin: ${this._origin.getId()}, Destiny: ${this._destiny.getId()}`
   }
 
-  public toJSON() : any {
-    return {
-      data : {
-        id : this._id,
-        source: this._origin.getId(),
-        target: this._destiny.getId(),
-        caption: this._caption || ''
-      }
-    }
-  }
+  public abstract toJSON() : any;
 }
 
 export default Link;
