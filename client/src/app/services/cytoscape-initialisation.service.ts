@@ -74,20 +74,24 @@ export class CytoscapeInitialisationService {
 			{
 				selector: "node", // The selector to know what element to apply style
 				css: { // The style to apply
-					"width": 200,
-					"height": 50,
+					"width": "label",
+					"height": "label",
+					"padding-top": "10px",
+					"padding-right": "10px",
+					"padding-bottom": "10px",
+					"padding-left": "10px",
 					"shape": "roundrectangle",
+					"label": "data(caption)",
 					"background-color": CssColors.LightGrey,
 					// "content": function(elem) {
-						// Trick to avoid throwing exception because when we begin to drag edge, service is undefined for a short instant...
-						// if(elem.data('service') != null) {
-						// 	return elem.data('service').srv;
+						// if(elem.data('id')) {
+						// 	return elem.data('id');
 						// }
 					// },
 					"text-halign": "center",
 					"text-valign": "center",
 					"border-width": 2,
-					"font-size": 30
+					"font-size": 12
 				}
 			},
 			{

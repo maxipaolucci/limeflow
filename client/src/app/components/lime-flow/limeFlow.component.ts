@@ -13,7 +13,8 @@ import CytoscapeLink from "../../graphs/Cytoscape/Link";
 })
 export class LimeFlowComponent implements OnInit {
 
-  private workFlow : CytoscapeFlow = null;
+  private workFlow : CytoscapeFlow = null; //the graph model
+  private workFlowUI : any = null; //the graph UI (Cytoscape graph instance)
 
   constructor(private cytoscapeInitialisationService : CytoscapeInitialisationService) {}
 
@@ -23,7 +24,7 @@ export class LimeFlowComponent implements OnInit {
 
   createLimeFlow() {
     this.workFlow = new CytoscapeFlow('workFlow', 'This is the workflow');
-    let s1 = new CytoscapeState('s1', 'State 1');
+    let s1 = new CytoscapeState('s1', 'State 1 y laalsfds asdf asdfas asdfasdf asdf asdf');
     let s2 = new CytoscapeState('s2', 'State 2');
     let s3 = new CytoscapeState('s3', 'State 3');
     this.workFlow.addState(s1);
@@ -37,16 +38,21 @@ export class LimeFlowComponent implements OnInit {
 
   ngAfterViewInit() {
     //We must render the graph here
-    this.render();
+    this.renderGraph();
   }
 
-  render() {
+  renderGraph() {
     let config = {
-      elements : this.workFlow.toJSON(),
+      elements : this.workFlow.toJSON(), //add the elements from the model
       container: this.cytoscapeInitialisationService.initContainer(),
       style: this.cytoscapeInitialisationService.initStyleSheet(),
       layout: this.cytoscapeInitialisationService.initLayout()
     };
-    cytoscape(config);
+    this.workFlowUI = cytoscape(config);
+    /**
+     * Initialize panzoom plugin
+     */
+    this.workFlowUI.panzoom({});
+    this.workFlowUI.userZoomingEnabled(false); //disable zoom by user events like mouse wheel
   }
 }

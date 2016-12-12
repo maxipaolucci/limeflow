@@ -1957,8 +1957,8 @@ declare module Cy {
         type Style = string; // solid, dotted, dashed, or double
 
         export interface NodeCss {
-            width?: number
-            height?: number
+            width?: any
+            height?: any
             shape?: Shape
             backgroundColor?: Colour
             "background-color"?: Colour

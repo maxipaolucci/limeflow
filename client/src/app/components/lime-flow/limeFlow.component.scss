@@ -3,11 +3,15 @@
 
 :host {
   //limeFlow-component
+  display: flex;
+  flex-direction: column;
+  height: 650px;
+  padding-bottom: 20px;
+
   #cy {
     background-color: #F2F2F2;
     display: block;
-    width: 900px;
-    height: 900px;
+    height: 700px;
     margin-bottom: 20px;
   }
 
