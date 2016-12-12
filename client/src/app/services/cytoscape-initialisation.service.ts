@@ -1,4 +1,4 @@
-/// <reference path="../../dts/cytoscape.d.ts" />
+
 
 import { Injectable }	from '@angular/core';
 

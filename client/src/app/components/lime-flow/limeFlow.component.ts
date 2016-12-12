@@ -36,6 +36,7 @@ export class LimeFlowComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    //We must render the graph here
     this.render();
   }
 
