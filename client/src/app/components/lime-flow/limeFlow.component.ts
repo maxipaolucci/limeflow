@@ -54,5 +54,6 @@ export class LimeFlowComponent implements OnInit {
      */
     this.workFlowUI.panzoom({});
     this.workFlowUI.userZoomingEnabled(false); //disable zoom by user events like mouse wheel
+    console.log(this.workFlowUI.elements('node#s1').addClass('pepe maxi'));
   }
 }
