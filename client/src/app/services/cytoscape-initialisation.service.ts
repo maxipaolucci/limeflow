@@ -95,6 +95,12 @@ export class CytoscapeInitialisationService {
 				}
 			},
 			{
+				selector: ".maxi",
+				css: {
+					'background-color': CssColors.DarkGrey
+				}
+			},
+			{
 				selector: "edge",
 				css: {
 					"width": 3,

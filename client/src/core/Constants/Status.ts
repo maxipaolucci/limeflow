@@ -7,7 +7,8 @@ enum Status {
   InProgress,
   Done,
   Complete,
-  Empty
+  Empty,
+  Blocked
 }
 
 export default Status;
