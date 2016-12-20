@@ -1,18 +1,19 @@
 import Status from "./Constants/Status";
 import State from "./State";
 import ITask from "./Interfaces/ITask";
+import {IObservable, IObserver} from "./Interfaces/IObserver";
 /**
  * Created by mpaoluc on 28/11/2016.
  */
 
-class Task implements ITask {
+class Task implements ITask, IObservable {
 
   private _id : string = null;
   private _name : string;
   private _description : string;
   private _status : Status;
   private _required : boolean;
-  private _state : State;
+  protected _observers : Array<IObserver>;
 
   constructor(id : string, required? : boolean, name? : string, description? : string) {
     this._id = id;
@@ -20,7 +21,7 @@ class Task implements ITask {
     this._name = name || null;
     this._description = description || null;
     this._status = Status.New;
-    this._state = null;
+    this._observers = Array<IObserver>();
   }
 
   public getDescription() : string {
@@ -33,10 +34,6 @@ class Task implements ITask {
 
   public getName() : string {
     return this._name;
-  }
-
-  public getState() : State {
-    return this._state;
   }
 
   public getStatus() : number {
@@ -54,33 +51,43 @@ class Task implements ITask {
   public setComplete() {
     //todo remove this implementation, this method must be abstract
     this._status = Status.Complete;
-    this._state.updateStatus();
+    this.notifyObservers();
   }
 
   public setRequired(required : boolean) {
     this._required = required;
   }
 
-  public setState(state : State) {
-    if (state) {
-      this._state = state;
-      this._state.updateStatus();
-    } else {
-      console.warn('Task: setState() > state is null');
-    }
-  }
-
   public setStatus(status : number) {
     if (status !== Status.Complete) {
       this._status = status;
-      if (this._state) {
-        this._state.updateStatus();
-      }
+      this.notifyObservers();
     }
   }
 
   public toString() {
     return `TASK ${this._id}: ${this._name} - Status: ${Status[this._status]}`;
+  }
+
+  public registerObserver(observer: IObserver): void {
+    this._observers.push(observer);
+    observer.receiveNotification(`${this._id} task was registeres`)
+  }
+
+  public removeObserver(observer: IObserver): void {
+    let i = this._observers.length;
+
+    while (i--) {
+      if (this._observers[i] === observer) {
+        this._observers.splice(i, 1);
+      } // if we found it.
+    }
+  }
+
+  public notifyObservers(): void {
+    for (let observer of this._observers) {
+      observer.receiveNotification(`${this._id} updated status`);
+    }
   }
 
 }

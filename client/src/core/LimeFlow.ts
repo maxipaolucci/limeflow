@@ -38,6 +38,7 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
   public addState(state : State) {
     if (state) {
       this._states.push(state);
+      state.registerObserver(this);
     } else {
       console.warn('LimeFlow: addState() - state param is empty or null');
     }
@@ -121,6 +122,7 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
 
   public updateStatus() : void {
     //todo update status like in state class
+    this._status = Status.InProgress;
   }
 }
 

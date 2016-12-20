@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {CytoscapeInitialisationService} from "../../services/cytoscape-initialisation.service";
-import CytoscapeFlow from "../../graphs/Cytoscape/Flow";
-import CytoscapeState from "../../graphs/Cytoscape/State";
-import CytoscapeLink from "../../graphs/Cytoscape/Link";
+import CytoscapeFlow from "../../graphs/Cytoscape/CytoscapeFlow";
+import CytoscapeState from "../../graphs/Cytoscape/CytoscapeState";
+import CytoscapeLink from "../../graphs/Cytoscape/CytoscapeLink";
 import Task from "../../../core/Task";
 
 
@@ -27,8 +27,8 @@ export class LimeFlowComponent implements OnInit {
     //We must render the graph here
     this.workFlow.render();
     setTimeout(() => {
-      this.t1.setStatus(2);
-    }, 3001);
+      this.t1.setStatus(6);
+    }, 3000);
   }
 
   createLimeFlow() {

@@ -16,6 +16,10 @@ class CytoscapeFlow extends LimeFlow {
     this.cytoscapeInitialisationService = cytoscapeInitialisationService;
   }
 
+  /**
+   * Implementation of the abstract method of LimeFlow. This generates a json structure accepted by Cytoscape as elements.
+   * @returns JSON . The cytoscape json object to generate a visual graph
+   */
   public toJSON() : any {
     let elementsArr : Array<any> = Array<any>();
 
@@ -27,7 +31,14 @@ class CytoscapeFlow extends LimeFlow {
       elementsArr.push(link.toJSON());
     }
 
-    return elementsArr;
+    let config = {
+      elements : elementsArr, //add the elements from the model
+      container: this.cytoscapeInitialisationService.initContainer(),
+      style: this.cytoscapeInitialisationService.initStyleSheet(),
+      layout: this.cytoscapeInitialisationService.initLayout()
+    };
+
+    return config;
   }
 
   public getUI () {
@@ -40,13 +51,7 @@ class CytoscapeFlow extends LimeFlow {
   }
 
   render() {
-    let config = {
-      elements : this.toJSON(), //add the elements from the model
-      container: this.cytoscapeInitialisationService.initContainer(),
-      style: this.cytoscapeInitialisationService.initStyleSheet(),
-      layout: this.cytoscapeInitialisationService.initLayout()
-    };
-    this.flowUI = cytoscape(config);
+    this.flowUI = cytoscape(this.toJSON());
 
     // Initialize panzoom plugin
     this.flowUI.panzoom({});

@@ -8,7 +8,7 @@ import {IObservable, IObserver} from "./Interfaces/IObserver";
  */
 
 
-abstract class State implements IState, IObservable {
+abstract class State implements IState, IObservable, IObserver {
   protected _id : string = null;
   protected _name : string;
   protected _description : string;
@@ -86,9 +86,8 @@ abstract class State implements IState, IObservable {
   }
 
   public registerTask(task : Task) {
-
     this._tasks.push(task);
-    this.updateStatus();
+    task.registerObserver(this);
   }
 
   public setDescription(description : string) : void {
@@ -113,7 +112,6 @@ abstract class State implements IState, IObservable {
    * @param status
    */
   public updateStatus() : void {
-    console.log(222);
     let countTasks : number = this._tasks.length;
     let tasksStatuses : {[key : number] : Array<Task>} = {};
 
@@ -129,7 +127,7 @@ abstract class State implements IState, IObservable {
       if (Object.keys(tasksStatuses).length === 1) {
         //all the tasks are in the same status so the state is in the same status of its tasks
         this._status = parseInt(Object.keys(tasksStatuses)[0]);
-        return;
+        return this.notifyObservers();
       }
 
       if (tasksStatuses[Status.New] && tasksStatuses[Status.New].length) {
@@ -139,7 +137,7 @@ abstract class State implements IState, IObservable {
         if (tasks.length) {
           //if any of those new is required then set inProgress
           this._status = Status.InProgress;
-          return;
+          return this.notifyObservers();
         }
 
         //set as done but continue evaluating...
@@ -153,7 +151,7 @@ abstract class State implements IState, IObservable {
         if (tasks.length) {
           //if any of those inProgress is required then set inProgress
           this._status = Status.InProgress;
-          return;
+          return this.notifyObservers();
         }
 
         //if all the inProgress tasks are not required then set as done
@@ -163,15 +161,15 @@ abstract class State implements IState, IObservable {
       if (tasksStatuses[Status.Done] && tasksStatuses[Status.Done].length) {
         //there are tasks done but not all of them
         this._status = Status.Done;
-        return;
+        return this.notifyObservers();
       }
 
     } else {
       this._status = Status.New;
-      return;
+      return this.notifyObservers();
     }
 
-    this.notifyObservers();
+    return this.notifyObservers();
   }
 
   public toString() : string {
@@ -198,6 +196,15 @@ abstract class State implements IState, IObservable {
     for (let observer of this._observers) {
       observer.receiveNotification(`${this._id} updated status`);
     }
+  }
+
+  /**
+   * This class is an Observer too so this is the implementation of receive notification
+   * @param message
+   */
+  public receiveNotification<T>(message: string): void {
+    console.log(message);
+    this.updateStatus();
   }
 }
 

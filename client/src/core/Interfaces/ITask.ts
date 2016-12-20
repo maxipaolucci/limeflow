@@ -7,12 +7,10 @@ interface ITask {
 
   getId() : string;
   isRequired() : boolean;
-  getState() : IState;
   getStatus() : number;
 
   setComplete() : void
   setRequired(required : boolean) : void;
-  setState(state : IState) : void;
   setStatus(status : number) : void;
 
   toString() : string;
