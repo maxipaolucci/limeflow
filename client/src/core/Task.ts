@@ -1,5 +1,5 @@
 import Status from "./Constants/Status";
-import IState from "./Interfaces/IState";
+import State from "./State";
 import ITask from "./Interfaces/ITask";
 /**
  * Created by mpaoluc on 28/11/2016.
@@ -12,7 +12,7 @@ class Task implements ITask {
   private _description : string;
   private _status : Status;
   private _required : boolean;
-  private _state : IState;
+  private _state : State;
 
   constructor(id : string, required? : boolean, name? : string, description? : string) {
     this._id = id;
@@ -35,7 +35,7 @@ class Task implements ITask {
     return this._name;
   }
 
-  public getState() : IState {
+  public getState() : State {
     return this._state;
   }
 
@@ -61,7 +61,7 @@ class Task implements ITask {
     this._required = required;
   }
 
-  public setState(state : IState) {
+  public setState(state : State) {
     if (state) {
       this._state = state;
       this._state.updateStatus();
@@ -71,7 +71,7 @@ class Task implements ITask {
   }
 
   public setStatus(status : number) {
-    if (this._status !== Status.Complete) {
+    if (status !== Status.Complete) {
       this._status = status;
       if (this._state) {
         this._state.updateStatus();

@@ -2,13 +2,13 @@ import IState from "./Interfaces/IState";
 import Status from "./Constants/Status";
 import Link from "./Link";
 import Task from "./Task";
+import {IObservable, IObserver} from "./Interfaces/IObserver";
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
 
 
-abstract class State implements IState {
-
+abstract class State implements IState, IObservable {
   protected _id : string = null;
   protected _name : string;
   protected _description : string;
@@ -18,6 +18,7 @@ abstract class State implements IState {
   protected _inputs : Array<Link>;
   protected _outputs : Array<Link>;
   protected _tasks : Array<Task>;
+  protected _observers : Array<IObserver>;
 
   constructor(id : string, name? : string, description? : string) {
     this._id = id;
@@ -25,10 +26,11 @@ abstract class State implements IState {
     this._description = description || null;
     this._initial = false;
     this._final = false;
-    this._status = Status.Empty;
+    this._status = Status.New;
     this._inputs = Array<Link>();
     this._outputs = Array<Link>();
     this._tasks = Array<Task>();
+    this._observers = Array<IObserver>();
   }
 
   public getDescription() : string {
@@ -84,6 +86,7 @@ abstract class State implements IState {
   }
 
   public registerTask(task : Task) {
+
     this._tasks.push(task);
     this.updateStatus();
   }
@@ -110,11 +113,17 @@ abstract class State implements IState {
    * @param status
    */
   public updateStatus() : void {
+    console.log(222);
     let countTasks : number = this._tasks.length;
     let tasksStatuses : {[key : number] : Array<Task>} = {};
+
     if (countTasks) {
       for (let task of this._tasks) {
-        tasksStatuses[task.getStatus()].push(task);
+        if (tasksStatuses[task.getStatus()]) {
+          tasksStatuses[task.getStatus()].push(task);
+        } else {
+          tasksStatuses[task.getStatus()] = [task];
+        }
       }
 
       if (Object.keys(tasksStatuses).length === 1) {
@@ -158,9 +167,11 @@ abstract class State implements IState {
       }
 
     } else {
-      this._status = Status.Empty;
+      this._status = Status.New;
       return;
     }
+
+    this.notifyObservers();
   }
 
   public toString() : string {
@@ -168,6 +179,26 @@ abstract class State implements IState {
   }
 
   public abstract toJSON() : any;
+
+  public registerObserver(observer: IObserver): void {
+    this._observers.push(observer);
+  }
+
+  public removeObserver(observer: IObserver): void {
+    let i = this._observers.length;
+
+    while (i--) {
+      if (this._observers[i] === observer) {
+        this._observers.splice(i, 1);
+      } // if we found it.
+    }
+  }
+
+  public notifyObservers(): void {
+    for (let observer of this._observers) {
+      observer.receiveNotification(`${this._id} updated status`);
+    }
+  }
 }
 
 export default State;

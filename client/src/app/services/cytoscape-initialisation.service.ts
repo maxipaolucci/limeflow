@@ -2,7 +2,7 @@
 
 import { Injectable }	from '@angular/core';
 
-import { CssColors }	from '../css-colors';
+import {CssColors, CssStatusColors}  from '../css-colors';
 
 @Injectable()
 export class CytoscapeInitialisationService {
@@ -82,7 +82,7 @@ export class CytoscapeInitialisationService {
 					"padding-left": "10px",
 					"shape": "roundrectangle",
 					"label": "data(caption)",
-					"background-color": CssColors.LightGrey,
+					"background-color": CssColors.Purple,
 					// "content": function(elem) {
 						// if(elem.data('id')) {
 						// 	return elem.data('id');
@@ -95,9 +95,39 @@ export class CytoscapeInitialisationService {
 				}
 			},
 			{
-				selector: ".maxi",
+				selector: "node.status-new",
 				css: {
-					'background-color': CssColors.DarkGrey
+					'background-color': CssStatusColors.New
+				}
+			},
+			{
+				selector: "node.status-inprogress",
+				css: {
+					'background-color': CssStatusColors.InProgress
+				}
+			},
+			{
+				selector: "node.status-done",
+				css: {
+					'background-color': CssStatusColors.Done
+				}
+			},
+			{
+				selector: "node.status-complete",
+				css: {
+					'background-color': CssStatusColors.Complete
+				}
+			},
+			{
+				selector: "node.status-stop",
+				css: {
+					'background-color': CssStatusColors.Stop
+				}
+			},
+			{
+				selector: "node.status-block",
+				css: {
+					'background-color': CssStatusColors.Block
 				}
 			},
 			{

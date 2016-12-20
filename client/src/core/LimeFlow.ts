@@ -6,9 +6,10 @@ import ILimeFlow from './Interfaces/ILimeFlow';
 import Status from "./Constants/Status";
 import State from "./State";
 import Link from "./Link";
+import {ElementType} from "./Constants/ElementType";
+import {IObserver} from "./Interfaces/IObserver";
 
-abstract class LimeFlow implements ILimeFlow {
-
+abstract class LimeFlow implements ILimeFlow, IObserver {
   protected _id : string = null;
   protected _name : string = null;
   protected _description : string;
@@ -22,7 +23,7 @@ abstract class LimeFlow implements ILimeFlow {
     this._description = description || null;
     this._states = Array<State>();
     this._links = Array<Link>();
-    this._status = Status.Empty;
+    this._status = Status.New;
   }
 
   public addLink(link : Link) {
@@ -40,6 +41,51 @@ abstract class LimeFlow implements ILimeFlow {
     } else {
       console.warn('LimeFlow: addState() - state param is empty or null');
     }
+  }
+
+  /**
+   * Retrieves a Link using the id
+   * @param id . The id looked for
+   * @returns Link . The Link found or null if not exists.
+   */
+  public getLinkById(id : string) {
+    let elements : Link[] = this._links.filter( link => link.getId() === id );
+
+    return elements.length > 0 ? elements[0] : null; //the link that matches that id must be unique
+  }
+
+  /**
+   * Retrieves a State using the id
+   * @param id . The id looked for
+   * @returns State . The State found or null if not exists.
+   */
+  public getStateById(id : string) {
+    let elements : State[] = this._states.filter( state => state.getId() === id );
+
+    return elements.length > 0 ? elements[0] : null; //the state that matches that id must be unique
+  }
+
+  /**
+   * Returns an element by ID
+   * @param id . The id looked for
+   * @param type . Optional, one of ElementType constant.
+   * @returns State or Link . The element found for that id or null
+   */
+  public getElementById(id : string, type? : string) {
+    let element : any = null;
+
+    if (type === ElementType.Node) {
+      element = <State>this.getStateById(id);
+    } else if (type === ElementType.Link) {
+      element = <Link>this.getLinkById(id);
+    } else if (!type) {
+      element = <State>this.getStateById(id);
+      if (!element) {
+        element = <Link>this.getLinkById(id);
+      }
+    }
+
+    return element;
   }
 
   public getId() {
@@ -64,6 +110,11 @@ abstract class LimeFlow implements ILimeFlow {
     }
 
     return limeFlowStr;
+  }
+
+  public receiveNotification<T>(message: string): void {
+    console.log(message);
+    this.updateStatus();
   }
 
   public abstract toJSON() : any;
