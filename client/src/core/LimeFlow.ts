@@ -3,11 +3,13 @@
  */
 
 import ILimeFlow from './Interfaces/ILimeFlow';
-import Status from "./Constants/Status";
+import Status from "./Constants/ElementStatus";
 import State from "./State";
+import Task from "./Task";
 import Link from "./Link";
 import {ElementType} from "./Constants/ElementType";
 import {IObserver} from "./Interfaces/IObserver";
+import NotificationBox from "./NotificationBox";
 
 abstract class LimeFlow implements ILimeFlow, IObserver {
   protected _id : string = null;
@@ -67,6 +69,23 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
   }
 
   /**
+   * Retrieves a Task using the id
+   * @param id . The id looked for
+   * @returns Task . The Task found or null if not exists.
+   */
+  public getTaskById(id : string) {
+    let element : Task = null;
+    for (let state of this._states) {
+      element = state.getTaskById(id);
+      if (element) {
+        break;
+      }
+    }
+
+    return element; //the state that matches that id must be unique
+  }
+
+  /**
    * Returns an element by ID
    * @param id . The id looked for
    * @param type . Optional, one of ElementType constant.
@@ -75,10 +94,12 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
   public getElementById(id : string, type? : string) {
     let element : any = null;
 
-    if (type === ElementType.Node) {
+    if (type === ElementType.State) {
       element = <State>this.getStateById(id);
     } else if (type === ElementType.Link) {
       element = <Link>this.getLinkById(id);
+    } else if (type === ElementType.Task) {
+      element = <Task>this.getTaskById(id);
     } else if (!type) {
       element = <State>this.getStateById(id);
       if (!element) {
@@ -113,8 +134,7 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
     return limeFlowStr;
   }
 
-  public receiveNotification<T>(message: string): void {
-    console.log(message);
+  public receiveNotification(message: NotificationBox<State>): void {
     this.updateStatus();
   }
 

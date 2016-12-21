@@ -3,7 +3,10 @@
  */
 
 import LimeFlow from "../../../core/LimeFlow";
+import State from "../../../core/State";
 import {CytoscapeInitialisationService} from "../../services/cytoscape-initialisation.service";
+import NotificationBox from "../../../core/NotificationBox";
+import NotificationCode from "../../../core/Constants/NotificationCode";
 class CytoscapeFlow extends LimeFlow {
 
   private flowUI : any; //the graph UI (Cytoscape graph instance)
@@ -21,18 +24,18 @@ class CytoscapeFlow extends LimeFlow {
    * @returns JSON . The cytoscape json object to generate a visual graph
    */
   public toJSON() : any {
-    let elementsArr : Array<any> = Array<any>();
+    let uiElements : Array<any> = Array<any>();
 
     for (let state of this._states) {
-      elementsArr.push(state.toJSON());
+      uiElements.push(state.toJSON());
     }
 
     for (let link of this._links) {
-      elementsArr.push(link.toJSON());
+      uiElements.push(link.toJSON());
     }
 
     let config = {
-      elements : elementsArr, //add the elements from the model
+      elements : uiElements, //add the elements from the model
       container: this.cytoscapeInitialisationService.initContainer(),
       style: this.cytoscapeInitialisationService.initStyleSheet(),
       layout: this.cytoscapeInitialisationService.initLayout()
@@ -41,13 +44,26 @@ class CytoscapeFlow extends LimeFlow {
     return config;
   }
 
-  public getUI () {
+  /**
+   * Returns the workflow UI instance
+   * @returns {any}
+   */
+  public getFlowUI () {
     return this.flowUI;
   }
 
-  public receiveNotification<T>(message: string): void {
+  public receiveNotification(message : NotificationBox<State>): void {
     super.receiveNotification(message);
-    this.render();
+
+    //if the notification is a Status changed then we update the color of the node
+    if (message.getCode() === NotificationCode.StatusChanged) {
+      let state = message.getObject();
+      let stateUI = this.flowUI.getElementById(state.getId());
+
+      stateUI.data(state.toJSON().data); //update UI Node data
+      stateUI.style('background-color', stateUI.data('cssStatusColor'));
+    }
+    //this.render();
   }
 
   render() {
@@ -58,8 +74,8 @@ class CytoscapeFlow extends LimeFlow {
     this.flowUI.userZoomingEnabled(false); //disable zoom by user events like mouse wheel
 
     // set color of states.
-    this.flowUI.nodes().forEach(( ele ) => {
-      ele.style('background-color', ele.data('cssStatusColor'));
+    this.flowUI.nodes().forEach(( stateUI ) => {
+      stateUI.style('background-color', stateUI.data('cssStatusColor'));
     });
 
     //setTimeout(() => {

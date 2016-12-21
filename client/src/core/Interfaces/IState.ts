@@ -12,6 +12,7 @@ interface IState {
   getOutputs() : Array<ILink>;
   getStatus() : number;
   getTasks() : Array<ITask>;
+  getTaskById(id : string) : ITask;
 
   isFinal() : boolean;
   isInitial() : boolean;

@@ -1,7 +1,9 @@
-import Status from "./Constants/Status";
+import Status from "./Constants/ElementStatus";
 import State from "./State";
 import ITask from "./Interfaces/ITask";
 import {IObservable, IObserver} from "./Interfaces/IObserver";
+import NotificationBox from "./NotificationBox";
+import NotificationCode from "./Constants/NotificationCode";
 /**
  * Created by mpaoluc on 28/11/2016.
  */
@@ -51,7 +53,8 @@ class Task implements ITask, IObservable {
   public setComplete() {
     //todo remove this implementation, this method must be abstract
     this._status = Status.Complete;
-    this.notifyObservers();
+    let message = new NotificationBox<Task>(this, 'Status changed', NotificationCode.StatusChanged);
+    this.notifyObservers(message);
   }
 
   public setRequired(required : boolean) {
@@ -61,7 +64,8 @@ class Task implements ITask, IObservable {
   public setStatus(status : number) {
     if (status !== Status.Complete) {
       this._status = status;
-      this.notifyObservers();
+      let message = new NotificationBox<Task>(this, 'Status changed', NotificationCode.StatusChanged);
+      this.notifyObservers(message);
     }
   }
 
@@ -71,7 +75,6 @@ class Task implements ITask, IObservable {
 
   public registerObserver(observer: IObserver): void {
     this._observers.push(observer);
-    observer.receiveNotification(`${this._id} task was registeres`)
   }
 
   public removeObserver(observer: IObserver): void {
@@ -84,9 +87,9 @@ class Task implements ITask, IObservable {
     }
   }
 
-  public notifyObservers(): void {
+  public notifyObservers(message : NotificationBox<Task>): void {
     for (let observer of this._observers) {
-      observer.receiveNotification(`${this._id} updated status`);
+      observer.receiveNotification(message);
     }
   }
 

@@ -1,6 +1,9 @@
 import State from "../../../core/State";
-import Status from "../../../core/Constants/Status";
+import Task from "../../../core/Task";
+import Status from "../../../core/Constants/ElementStatus";
 import {CssStatusColors} from "../../css-colors";
+import {Notification} from "rxjs";
+import NotificationBox from "../../../core/NotificationBox";
 /**
  * Created by Maxi Paolucci on 12/12/2016.
  */
@@ -13,47 +16,20 @@ class CytoscapeState extends State {
 
   /**
    * Get the css status color from a Status value
-   * @returns {string}
+   * @param (Enum<Status>) status . The status of the node
+   *
+   * @returns {string} . The hexa value of the color
    */
   public getCssStatusColor(status : Status) : string {
-    let cssStatus : string = null;
+    let cssStatusColor : string = CssStatusColors[Status[status]];
 
-    switch(status) {
-      case Status.New:
-        cssStatus = CssStatusColors.New;
-        break;
-
-      case Status.InProgress:
-        cssStatus = CssStatusColors.InProgress;
-        break;
-
-      case Status.Done:
-        cssStatus = CssStatusColors.Done;
-        break;
-
-      case Status.Complete:
-        cssStatus = CssStatusColors.Complete;
-        break;
-
-      case Status.Stop:
-        cssStatus = CssStatusColors.Stop;
-        break;
-
-      case Status.Block:
-        cssStatus = CssStatusColors.Block;
-        break;
-
-      default:
-        cssStatus = CssStatusColors.New;
-    }
-
-    return cssStatus;
+    return cssStatusColor;
   }
 
-  // public updateStatus() : any {
-  //   super.updateStatus();
-  //   return this.toJSON();
-  // }
+  public receiveNotification(message: NotificationBox<Task>): void {
+    super.receiveNotification(message);
+    //this.render();
+  }
 
   public toJSON() {
     return {

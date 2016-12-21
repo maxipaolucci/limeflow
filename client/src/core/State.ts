@@ -1,8 +1,10 @@
 import IState from "./Interfaces/IState";
-import Status from "./Constants/Status";
+import Status from "./Constants/ElementStatus";
 import Link from "./Link";
 import Task from "./Task";
 import {IObservable, IObserver} from "./Interfaces/IObserver";
+import NotificationBox from "./NotificationBox";
+import NotificationCode from "./Constants/NotificationCode";
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
@@ -114,6 +116,7 @@ abstract class State implements IState, IObservable, IObserver {
   public updateStatus() : void {
     let countTasks : number = this._tasks.length;
     let tasksStatuses : {[key : number] : Array<Task>} = {};
+    let notificationBox = new NotificationBox<State>(this, 'Status changed', NotificationCode.StatusChanged);
 
     if (countTasks) {
       for (let task of this._tasks) {
@@ -127,7 +130,7 @@ abstract class State implements IState, IObservable, IObserver {
       if (Object.keys(tasksStatuses).length === 1) {
         //all the tasks are in the same status so the state is in the same status of its tasks
         this._status = parseInt(Object.keys(tasksStatuses)[0]);
-        return this.notifyObservers();
+        return this.notifyObservers(notificationBox);
       }
 
       if (tasksStatuses[Status.New] && tasksStatuses[Status.New].length) {
@@ -137,7 +140,7 @@ abstract class State implements IState, IObservable, IObserver {
         if (tasks.length) {
           //if any of those new is required then set inProgress
           this._status = Status.InProgress;
-          return this.notifyObservers();
+          return this.notifyObservers(notificationBox);
         }
 
         //set as done but continue evaluating...
@@ -151,7 +154,7 @@ abstract class State implements IState, IObservable, IObserver {
         if (tasks.length) {
           //if any of those inProgress is required then set inProgress
           this._status = Status.InProgress;
-          return this.notifyObservers();
+          return this.notifyObservers(notificationBox);
         }
 
         //if all the inProgress tasks are not required then set as done
@@ -161,15 +164,15 @@ abstract class State implements IState, IObservable, IObserver {
       if (tasksStatuses[Status.Done] && tasksStatuses[Status.Done].length) {
         //there are tasks done but not all of them
         this._status = Status.Done;
-        return this.notifyObservers();
+        return this.notifyObservers(notificationBox);
       }
 
     } else {
       this._status = Status.New;
-      return this.notifyObservers();
+      return this.notifyObservers(notificationBox);
     }
 
-    return this.notifyObservers();
+    return this.notifyObservers(notificationBox);
   }
 
   public toString() : string {
@@ -177,6 +180,17 @@ abstract class State implements IState, IObservable, IObserver {
   }
 
   public abstract toJSON() : any;
+
+  /**
+   * Retrieves a Task using the id
+   * @param id . The id looked for
+   * @returns Task . The Task found or null if not exists.
+   */
+  public getTaskById(id : string) {
+    let elements : Task[] = this._tasks.filter( task => task.getId() === id );
+
+    return elements.length > 0 ? elements[0] : null; //the state that matches that id must be unique
+  }
 
   public registerObserver(observer: IObserver): void {
     this._observers.push(observer);
@@ -192,9 +206,9 @@ abstract class State implements IState, IObservable, IObserver {
     }
   }
 
-  public notifyObservers(): void {
+  public notifyObservers(message : NotificationBox<State>): void {
     for (let observer of this._observers) {
-      observer.receiveNotification(`${this._id} updated status`);
+      observer.receiveNotification(message);
     }
   }
 
@@ -202,8 +216,7 @@ abstract class State implements IState, IObservable, IObserver {
    * This class is an Observer too so this is the implementation of receive notification
    * @param message
    */
-  public receiveNotification<T>(message: string): void {
-    console.log(message);
+  public receiveNotification(message : NotificationBox<Task>): void {
     this.updateStatus();
   }
 }
