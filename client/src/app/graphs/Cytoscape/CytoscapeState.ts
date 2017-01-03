@@ -26,20 +26,36 @@ class CytoscapeState extends State {
     return cssStatusColor;
   }
 
+
   public receiveNotification(message: NotificationBox<Task>): void {
     super.receiveNotification(message);
     //this.render();
   }
 
-  public toJSON() {
+  public toJSON() : any {
     return {
       data : {
         id: this._id,
         caption: this._name,
         status: this._status,
-        cssStatusColor: this.getCssStatusColor(this._status)
+        cssStatusColor: this.getCssStatusColor(this._status),
+        tasks : this.tasksToJSON()
       }
     };
+  }
+
+  public fromJSON(jsonDefinition : any) : CytoscapeState {
+    this._id = jsonDefinition.data.id;
+    this._name = jsonDefinition.data.caption;
+    this._status = jsonDefinition.data.status;
+
+    for (let task of jsonDefinition.data.tasks) {
+      let t = new Task(task.id, task.required, task.name, task.description);
+      t.setStatus(task.status);
+      this.registerTask(t);
+    }
+
+    return this;
   }
 }
 

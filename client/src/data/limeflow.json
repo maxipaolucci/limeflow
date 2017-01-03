@@ -1,0 +1,186 @@
+{
+  "status": "success",
+  "data": {
+    "elements": {
+      "nodes": [{
+        "data": {
+          "id": "s1",
+          "caption": "State 1",
+          "status": 1,
+          "cssStatusColor": "#AAD5FF",
+          "tasks": [{
+            "id": "t1",
+            "description": "Description for task 1",
+            "name": "Tarea 1",
+            "required": true,
+            "status": 1
+          }]
+        },
+        "position": {
+          "x": 207.16666666666666,
+          "y": 295.5
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": true,
+        "locked": false,
+        "grabbable": true,
+        "classes": ""
+      }, {
+        "data": {
+          "id": "s2",
+          "caption": "State 2",
+          "status": 1,
+          "cssStatusColor": "#AAD5FF",
+          "tasks": [{
+            "id": "t2",
+            "description": "Description for task 2",
+            "name": "Tarea 2",
+            "required": true,
+            "status": 1
+          }, {
+            "id": "t3",
+            "description": "Description for task 3",
+            "name": "Tarea 3",
+            "required": true,
+            "status": 1
+          }]
+        },
+        "position": {
+          "x": 621.5,
+          "y": 295.5
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": true,
+        "locked": false,
+        "grabbable": true,
+        "classes": ""
+      }, {
+        "data": {
+          "id": "s3",
+          "caption": "State 3",
+          "status": 1,
+          "cssStatusColor": "#AAD5FF",
+          "tasks": []
+        },
+        "position": {
+          "x": 1035.8333333333333,
+          "y": 295.5
+        },
+        "group": "nodes",
+        "removed": false,
+        "selected": false,
+        "selectable": true,
+        "locked": false,
+        "grabbable": true,
+        "classes": ""
+      }],
+      "edges": [{
+        "data": {
+          "id": "l1",
+          "source": "s1",
+          "target": "s2",
+          "caption": ""
+        },
+        "position": {},
+        "group": "edges",
+        "removed": false,
+        "selected": false,
+        "selectable": true,
+        "locked": false,
+        "grabbable": true,
+        "classes": ""
+      }, {
+        "data": {
+          "id": "l2",
+          "source": "s2",
+          "target": "s3",
+          "caption": "Link from State 2 to State 3"
+        },
+        "position": {},
+        "group": "edges",
+        "removed": false,
+        "selected": false,
+        "selectable": true,
+        "locked": false,
+        "grabbable": true,
+        "classes": ""
+      }]
+    },
+    "style": [{
+      "selector": "node",
+      "style": {
+        "width": "label",
+        "height": "label",
+        "padding-top": "10px",
+        "padding-right": "10px",
+        "padding-bottom": "10px",
+        "padding-left": "10px",
+        "shape": "roundrectangle",
+        "label": "data(caption)",
+        "background-color": "#CC99CC",
+        "text-halign": "center",
+        "text-valign": "center",
+        "border-width": "2px",
+        "font-size": "12px"
+      }
+    }, {
+      "selector": "node.status-new",
+      "style": {
+        "background-color": "#AAD5FF"
+      }
+    }, {
+      "selector": "node.status-inprogress",
+      "style": {
+        "background-color": "#FFF06C"
+      }
+    }, {
+      "selector": "node.status-done",
+      "style": {
+        "background-color": "#98FF7A"
+      }
+    }, {
+      "selector": "node.status-complete",
+      "style": {
+        "background-color": "#CFA0FF"
+      }
+    }, {
+      "selector": "node.status-stop",
+      "style": {
+        "background-color": "#D1CECD"
+      }
+    }, {
+      "selector": "node.status-block",
+      "style": {
+        "background-color": "#FF8C94"
+      }
+    }, {
+      "selector": "edge",
+      "style": {
+        "width": "3px",
+        "line-color": "#A6A6A6",
+        "target-arrow-color": "#A6A6A6",
+        "target-arrow-shape": "triangle",
+        "curve-style": "bezier"
+      }
+    }],
+    "zoomingEnabled": true,
+    "userZoomingEnabled": false,
+    "zoom": 1.3282185628742516,
+    "minZoom": 1e-50,
+    "maxZoom": 1e+50,
+    "panningEnabled": true,
+    "userPanningEnabled": true,
+    "pan": {
+      "x": -203.98783682634735,
+      "y": -96.98858532934133
+    },
+    "boxSelectionEnabled": true,
+    "renderer": {
+      "name": "canvas"
+    }
+  }
+}

@@ -181,6 +181,17 @@ abstract class State implements IState, IObservable, IObserver {
 
   public abstract toJSON() : any;
 
+  public abstract fromJSON(jsonDefinition : any) : State;
+
+  /**
+   * Returns a JSON representation of the tasks.
+   * As tasks to JSON it is not abstract we can implement this.
+   * @returns {any[]}
+   */
+  public tasksToJSON() : Array<any> {
+    return this._tasks.map(task => task.toJSON());
+  }
+
   /**
    * Retrieves a Task using the id
    * @param id . The id looked for

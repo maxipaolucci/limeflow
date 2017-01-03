@@ -29,6 +29,7 @@ interface IState {
 
   toString() : string;
   toJSON() : any;
+  fromJSON(jsonDefinition : any) : IState;
 }
 
 export default IState;

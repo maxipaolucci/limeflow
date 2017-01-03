@@ -1,7 +1,6 @@
 /**
  * Created by mpaoluc on 28/11/2016.
  */
-import IState from "./IState";
 
 interface ITask {
 
@@ -14,6 +13,7 @@ interface ITask {
   setStatus(status : number) : void;
 
   toString() : string;
+  toJSON() : any;
 }
 
 export default ITask;

@@ -18,6 +18,7 @@ interface ILimeFlow {
   getTaskById(id : string) : ITask;
   toString() : string;
   toJSON() : any;
+  fromJSON(jsonDefinition : any) : ILimeFlow;
   updateStatus() : void;
 }
 

@@ -7,6 +7,8 @@ import State from "../../../core/State";
 import {CytoscapeInitialisationService} from "../../services/cytoscape-initialisation.service";
 import NotificationBox from "../../../core/NotificationBox";
 import NotificationCode from "../../../core/Constants/NotificationCode";
+import CytoscapeState from "./CytoscapeState";
+import CytoscapeLink from "./CytoscapeLink";
 class CytoscapeFlow extends LimeFlow {
 
   private flowUI : any; //the graph UI (Cytoscape graph instance)
@@ -17,6 +19,25 @@ class CytoscapeFlow extends LimeFlow {
 
     this.flowUI = null;
     this.cytoscapeInitialisationService = cytoscapeInitialisationService;
+  }
+
+  fromJSON(jsonDefinition : any) : CytoscapeFlow {
+    let nodes : Array<any> = jsonDefinition.elements.nodes;
+    let edges : Array<any> = jsonDefinition.elements.edges;
+
+    for (let node of nodes) {
+      let state = new CytoscapeState(node.data.id, node.data.caption);
+      this.addState(state.fromJSON(node));
+    }
+
+    for (let edge of edges) {
+      let link = new CytoscapeLink(edge.data.id,
+        <CytoscapeState>this.getStateById(edge.data.source),
+        <CytoscapeState>this.getStateById(edge.data.target), edge.data.caption);
+      this.addLink(link);
+    }
+
+    return this;
   }
 
   /**
@@ -60,7 +81,7 @@ class CytoscapeFlow extends LimeFlow {
       let state = message.getObject();
       let stateUI = this.flowUI.getElementById(state.getId());
 
-      stateUI.data(state.toJSON().data); //update UI Node data
+      stateUI.json(state.toJSON()); //update UI Node data
       stateUI.style('background-color', stateUI.data('cssStatusColor'));
     }
     //this.render();
@@ -77,12 +98,10 @@ class CytoscapeFlow extends LimeFlow {
     this.flowUI.nodes().forEach(( stateUI ) => {
       stateUI.style('background-color', stateUI.data('cssStatusColor'));
     });
+  }
 
-    //setTimeout(() => {
-    //let nodeModel = <CytoscapeState>(this.workFlow.getElementById('s1', ElementType.Node));
-    //console.log(nodeModel);
-    //this.workFlowUI.elements('node#s1').style('background-color', '#ededed');
-    //}, 3000);
+  exportJSON() {
+    return this.flowUI.json();
   }
 }
 

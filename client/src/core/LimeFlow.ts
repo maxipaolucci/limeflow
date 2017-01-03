@@ -51,7 +51,7 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
    * @param id . The id looked for
    * @returns Link . The Link found or null if not exists.
    */
-  public getLinkById(id : string) {
+  public getLinkById(id : string) : Link {
     let elements : Link[] = this._links.filter( link => link.getId() === id );
 
     return elements.length > 0 ? elements[0] : null; //the link that matches that id must be unique
@@ -62,7 +62,7 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
    * @param id . The id looked for
    * @returns State . The State found or null if not exists.
    */
-  public getStateById(id : string) {
+  public getStateById(id : string) : State {
     let elements : State[] = this._states.filter( state => state.getId() === id );
 
     return elements.length > 0 ? elements[0] : null; //the state that matches that id must be unique
@@ -73,7 +73,7 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
    * @param id . The id looked for
    * @returns Task . The Task found or null if not exists.
    */
-  public getTaskById(id : string) {
+  public getTaskById(id : string) : Task {
     let element : Task = null;
     for (let state of this._states) {
       element = state.getTaskById(id);
@@ -139,6 +139,12 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
   }
 
   public abstract toJSON() : any;
+
+  /**
+   * Creates a limeflow from a json definition
+   * @param jsonDefinition
+   */
+  public abstract fromJSON(jsonDefinition : any) : LimeFlow;
 
   public updateStatus() : void {
     //todo update status like in state class

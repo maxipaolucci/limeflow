@@ -73,6 +73,16 @@ class Task implements ITask, IObservable {
     return `TASK ${this._id}: ${this._name} - Status: ${Status[this._status]}`;
   }
 
+  public toJSON() : any {
+    return {
+      id : this._id,
+      description : this._description,
+      name : this._name,
+      required : this._required,
+      status : this._status
+    };
+  }
+
   public registerObserver(observer: IObserver): void {
     this._observers.push(observer);
   }
