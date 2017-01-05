@@ -12,16 +12,20 @@ import CytoscapeLink from "./CytoscapeLink";
 class CytoscapeFlow extends LimeFlow {
 
   private flowUI : any; //the graph UI (Cytoscape graph instance)
+  private cytoscapeConfigObj : any;
   private cytoscapeInitialisationService : CytoscapeInitialisationService;
 
   constructor(cytoscapeInitialisationService: CytoscapeInitialisationService, id : string, name : string, description? : string) {
     super(id, description);
 
     this.flowUI = null;
+    this.cytoscapeConfigObj = null;
     this.cytoscapeInitialisationService = cytoscapeInitialisationService;
   }
 
   fromJSON(jsonDefinition : any) : CytoscapeFlow {
+    this.cytoscapeConfigObj = jsonDefinition;
+
     let nodes : Array<any> = jsonDefinition.elements.nodes;
     let edges : Array<any> = jsonDefinition.elements.edges;
 
@@ -44,23 +48,26 @@ class CytoscapeFlow extends LimeFlow {
    * Implementation of the abstract method of LimeFlow. This generates a json structure accepted by Cytoscape as elements.
    * @returns JSON . The cytoscape json object to generate a visual graph
    */
-  public toJSON() : any {
-    let uiElements : Array<any> = Array<any>();
+  toJSON() : any {
+    let config : any = {};
+    if (this.cytoscapeConfigObj) {
+      config = this.cytoscapeConfigObj;
+      config.layout = this.cytoscapeInitialisationService.setLayout('preset');
+    } else {
+      let uiElements : Array<any> = Array<any>();
 
-    for (let state of this._states) {
-      uiElements.push(state.toJSON());
+      for (let state of this._states) {
+        uiElements.push(state.toJSON());
+      }
+
+      for (let link of this._links) {
+        uiElements.push(link.toJSON());
+      }
+
+      config.elements = uiElements;
+      config.layout = this.cytoscapeInitialisationService.initLayout();
     }
-
-    for (let link of this._links) {
-      uiElements.push(link.toJSON());
-    }
-
-    let config = {
-      elements : uiElements, //add the elements from the model
-      container: this.cytoscapeInitialisationService.initContainer(),
-      style: this.cytoscapeInitialisationService.initStyleSheet(),
-      layout: this.cytoscapeInitialisationService.initLayout()
-    };
+    config.container = this.cytoscapeInitialisationService.initContainer();
 
     return config;
   }
@@ -69,25 +76,24 @@ class CytoscapeFlow extends LimeFlow {
    * Returns the workflow UI instance
    * @returns {any}
    */
-  public getFlowUI () {
+  getFlowUI () {
     return this.flowUI;
   }
 
-  public receiveNotification(message : NotificationBox<State>): void {
+  receiveNotification(message : NotificationBox<State>): void {
     super.receiveNotification(message);
 
     //if the notification is a Status changed then we update the color of the node
     if (message.getCode() === NotificationCode.StatusChanged) {
-      let state = message.getObject();
-      let stateUI = this.flowUI.getElementById(state.getId());
+      let state : State = message.getObject();
+      let stateUI : any = this.flowUI.getElementById(state.getId());
 
       stateUI.json(state.toJSON()); //update UI Node data
       stateUI.style('background-color', stateUI.data('cssStatusColor'));
     }
-    //this.render();
   }
 
-  render() {
+  render() : void {
     this.flowUI = cytoscape(this.toJSON());
 
     // Initialize panzoom plugin
@@ -100,7 +106,11 @@ class CytoscapeFlow extends LimeFlow {
     });
   }
 
-  exportJSON() {
+  /**
+   * Export the cytoscape graph in json format
+   * @returns {string|any}
+   */
+  cyToJSON() : any {
     return this.flowUI.json();
   }
 }

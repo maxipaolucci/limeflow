@@ -138,11 +138,18 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
     this.updateStatus();
   }
 
+  /**
+   * Generates a json definition of the flow rendered. Abstract because depends on the json format
+   * of the concrete class who is responsible to render the graph
+   */
   public abstract toJSON() : any;
 
   /**
-   * Creates a limeflow from a json definition
+   * Creates a flow from a json definition. Abstract method implemented from concrete class
+   * who knows the json format required to render the flow
+   *
    * @param jsonDefinition
+   * @return LimeFlow. The instance created.
    */
   public abstract fromJSON(jsonDefinition : any) : LimeFlow;
 

@@ -158,4 +158,18 @@ export class CytoscapeInitialisationService {
 
 		return this.layout;
 	}
+
+	/**
+	 * Set layout of the graph using the layout param.
+	 * See Cytoscape JS website for possible values of layout : {@link http://js.cytoscape.org/#layouts}
+	 * @method CytoscapeInitialisationService#initLayout
+	 * @param layout : String . The layout to set
+	 */
+	public setLayout(layout : string) : Cy.LayoutOptions {
+		this.layout = {
+			name: layout
+		}
+
+		return this.layout;
+	}
 }
