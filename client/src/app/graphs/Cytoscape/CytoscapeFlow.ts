@@ -1,7 +1,6 @@
 /**
  * Created by Maxi Paolucci on 12/12/2016.
  */
-
 import LimeFlow from "../../../core/LimeFlow";
 import State from "../../../core/State";
 import {CytoscapeInitialisationService} from "../../services/cytoscape-initialisation.service";
@@ -9,18 +8,35 @@ import NotificationBox from "../../../core/NotificationBox";
 import NotificationCode from "../../../core/Constants/NotificationCode";
 import CytoscapeState from "./CytoscapeState";
 import CytoscapeLink from "./CytoscapeLink";
+import {LimeFlowComponent} from "../../components/lime-flow/limeFlow.component";
+import {CssStatusColors} from "../../css-colors";
+import Status from "../../../core/Constants/ElementStatus";
 class CytoscapeFlow extends LimeFlow {
 
+  private componentContainer : LimeFlowComponent;
   private flowUI : any; //the graph UI instance (Cytoscape graph instance)
   private cytoscapeConfigObj : any; //the cytoscape configuration object
   private cytoscapeInitialisationService : CytoscapeInitialisationService;
 
-  constructor(cytoscapeInitialisationService: CytoscapeInitialisationService, id : string, name : string, description? : string) {
+  constructor(componentContainer : LimeFlowComponent,
+              cytoscapeInitialisationService: CytoscapeInitialisationService,
+              id : string, name : string, description? : string) {
     super(id, name, description);
 
+    this.componentContainer = componentContainer;
     this.flowUI = null;
     this.cytoscapeConfigObj = null;
     this.cytoscapeInitialisationService = cytoscapeInitialisationService;
+  }
+
+  /**
+   * Get the css status color from a Status value
+   * @param (Enum<Status>) status . The status of the node
+   *
+   * @returns {string} . The hexa value of the color
+   */
+  public getCssStatusColor(status : number) : string {
+    return CssStatusColors[Status[status]];
   }
 
   /**
@@ -92,6 +108,7 @@ class CytoscapeFlow extends LimeFlow {
    */
   receiveNotification(message : NotificationBox<State>): void {
     super.receiveNotification(message);
+    this.componentContainer.updateStatus(this.getStatus());
 
     //if the notification is a Status changed then we update the color of the node
     if (message.getCode() === NotificationCode.StatusChanged) {

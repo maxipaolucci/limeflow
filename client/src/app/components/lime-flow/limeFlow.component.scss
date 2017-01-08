@@ -8,6 +8,17 @@
   height: 650px;
   padding-bottom: 20px;
 
+  #flow-status {
+    color: #ffffff;
+
+    .flow-status__color {
+      height: 30px;
+      width: 30px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+  }
+
   #cy {
     background-color: #000000;
     display: block;

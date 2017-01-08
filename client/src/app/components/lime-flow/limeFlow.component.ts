@@ -13,6 +13,7 @@ import {GraphService} from "../../services/graph.service";
 export class LimeFlowComponent implements OnInit {
 
   private workFlow : CytoscapeFlow = null; //the graph model
+  private statusColor : string;
   private data : any = null;
 
   constructor(private graphService : GraphService,
@@ -23,7 +24,8 @@ export class LimeFlowComponent implements OnInit {
       .subscribe(
         //load json from a mocked graph
         (graphJSON : any) => {
-          this.workFlow = new CytoscapeFlow(this.cytoscapeInitialisationService, 'workFlow', 'This is the workflow');
+          this.workFlow = new CytoscapeFlow(this,
+              this.cytoscapeInitialisationService, 'workFlow', 'This is the workflow');
           this.workFlow.fromJSON(graphJSON).render();
           setTimeout(() => {
             this.workFlow.getTaskById('t1').setStatus(6);
@@ -35,5 +37,10 @@ export class LimeFlowComponent implements OnInit {
         (error : any) =>  console.error(error)
       );
 
+  }
+
+  updateStatus(status : number) : void {
+    this.statusColor = this.workFlow.getCssStatusColor(status);
+    console.log(`status updated to ${status}`);
   }
 }

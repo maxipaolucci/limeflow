@@ -167,11 +167,10 @@ abstract class State implements IState, IObservable, IObserver {
         return this.notifyObservers(notificationBox);
       }
 
-    } else {
-      this._status = Status.New;
-      return this.notifyObservers(notificationBox);
     }
-
+    
+    //if nothing happend before then set as New
+    this._status = Status.New;
     return this.notifyObservers(notificationBox);
   }
 
@@ -203,11 +202,11 @@ abstract class State implements IState, IObservable, IObserver {
     return elements.length > 0 ? elements[0] : null; //the state that matches that id must be unique
   }
 
-  public registerObserver(observer: IObserver): void {
+  registerObserver(observer: IObserver) : void {
     this._observers.push(observer);
   }
 
-  removeObserver(observer: IObserver): void {
+  removeObserver(observer: IObserver) : void {
     let i = this._observers.length;
 
     while (i--) {
@@ -217,7 +216,7 @@ abstract class State implements IState, IObservable, IObserver {
     }
   }
 
-  notifyObservers(message : NotificationBox<State>): void {
+  notifyObservers(message : NotificationBox<State>) : void {
     for (let observer of this._observers) {
       observer.receiveNotification(message);
     }

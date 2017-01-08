@@ -20,10 +20,8 @@ class CytoscapeState extends State {
    *
    * @returns {string} . The hexa value of the color
    */
-  public getCssStatusColor(status : Status) : string {
-    let cssStatusColor : string = CssStatusColors[Status[status]];
-
-    return cssStatusColor;
+  public getCssStatusColor(status : number) : string {
+    return CssStatusColors[Status[status]];
   }
 
 
