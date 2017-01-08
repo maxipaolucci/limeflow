@@ -35,72 +35,72 @@ abstract class State implements IState, IObservable, IObserver {
     this._observers = Array<IObserver>();
   }
 
-  public getDescription() : string {
+  getDescription() : string {
     return this._description;
   }
 
-  public getId() : string {
+  getId() : string {
     return this._id;
   }
 
-  public getInputs() : Array<Link> {
+  getInputs() : Array<Link> {
     return this._inputs;
   }
 
-  public getName() : string {
+  getName() : string {
     return this._name;
   }
 
-  public getOutputs() : Array<Link> {
+  getOutputs() : Array<Link> {
     return this._outputs;
   }
 
-  public getStatus() : number {
+  getStatus() : number {
     return this._status;
   }
 
-  public getTasks() : Array<Task> {
+  getTasks() : Array<Task> {
     return this._tasks;
   }
 
-  public isFinal(): boolean {
+  isFinal(): boolean {
     return this._final;
   }
 
-  public isInitial(): boolean {
+  isInitial(): boolean {
     return this._initial;
   }
 
-  public isComplete(): boolean {
+  isComplete(): boolean {
     return this._status === Status.Complete;
   }
 
-  public isDone(): boolean {
+  isDone(): boolean {
     return this._status === Status.Done || this._status === Status.Complete;
   }
 
-  public registerInput(link : Link) : void {
+  registerInput(link : Link) : void {
     this._inputs.push(link);
   }
 
-  public registerOutput(link : Link) : void {
+  registerOutput(link : Link) : void {
     this._outputs.push(link);
   }
 
-  public registerTask(task : Task) {
+  registerTask(task : Task) {
     this._tasks.push(task);
     task.registerObserver(this);
   }
 
-  public setDescription(description : string) : void {
+  setDescription(description : string) : void {
     this._description = description;
   }
 
-  public setFinal(final : boolean) {
+  setFinal(final : boolean) {
     this._final = final;
   }
 
-  public setInitial(initial : boolean) {
+  setInitial(initial : boolean) {
     this._initial = initial;
   }
 
@@ -113,7 +113,7 @@ abstract class State implements IState, IObservable, IObserver {
    * on the status of its tasks.
    * @param status
    */
-  public updateStatus() : void {
+  updateStatus() : void {
     let countTasks : number = this._tasks.length;
     let tasksStatuses : {[key : number] : Array<Task>} = {};
     let notificationBox = new NotificationBox<State>(this, 'Status changed', NotificationCode.StatusChanged);
@@ -175,20 +175,20 @@ abstract class State implements IState, IObservable, IObserver {
     return this.notifyObservers(notificationBox);
   }
 
-  public toString() : string {
+  toString() : string {
     return `STATE ${this._id}: ${this._name} - Status: ${Status[this._status]}`
   }
 
   public abstract toJSON() : any;
 
-  public abstract fromJSON(jsonDefinition : any) : State;
+  abstract fromJSON(jsonDefinition : any) : State;
 
   /**
    * Returns a JSON representation of the tasks.
    * As tasks to JSON it is not abstract we can implement this.
    * @returns {any[]}
    */
-  public tasksToJSON() : Array<any> {
+  tasksToJSON() : Array<any> {
     return this._tasks.map(task => task.toJSON());
   }
 
@@ -197,7 +197,7 @@ abstract class State implements IState, IObservable, IObserver {
    * @param id . The id looked for
    * @returns Task . The Task found or null if not exists.
    */
-  public getTaskById(id : string) {
+  getTaskById(id : string) {
     let elements : Task[] = this._tasks.filter( task => task.getId() === id );
 
     return elements.length > 0 ? elements[0] : null; //the state that matches that id must be unique
@@ -207,7 +207,7 @@ abstract class State implements IState, IObservable, IObserver {
     this._observers.push(observer);
   }
 
-  public removeObserver(observer: IObserver): void {
+  removeObserver(observer: IObserver): void {
     let i = this._observers.length;
 
     while (i--) {
@@ -217,7 +217,7 @@ abstract class State implements IState, IObservable, IObserver {
     }
   }
 
-  public notifyObservers(message : NotificationBox<State>): void {
+  notifyObservers(message : NotificationBox<State>): void {
     for (let observer of this._observers) {
       observer.receiveNotification(message);
     }
@@ -227,7 +227,7 @@ abstract class State implements IState, IObservable, IObserver {
    * This class is an Observer too so this is the implementation of receive notification
    * @param message
    */
-  public receiveNotification(message : NotificationBox<Task>): void {
+  receiveNotification(message : NotificationBox<Task>): void {
     this.updateStatus();
   }
 }

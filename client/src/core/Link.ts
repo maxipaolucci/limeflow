@@ -22,15 +22,15 @@ abstract class Link implements ILink {
     //TODO check no cycles
   }
 
-  public setId(id : string): void {
+  setId(id : string): void {
     this._id = id;
   }
 
-  public setCaption(caption : string): void {
+  setCaption(caption : string): void {
     this._caption = caption;
   }
 
-  public setOrigin(state: State): boolean {
+  setOrigin(state: State): boolean {
     if (state) {
       this._origin = state;
       this._origin.registerOutput(this);
@@ -41,7 +41,7 @@ abstract class Link implements ILink {
     return false;
   }
 
-  public setDestiny(state: State): boolean {
+  setDestiny(state: State): boolean {
     if (state) {
       this._origin = state;
       this._destiny.registerInput(this);
@@ -52,7 +52,7 @@ abstract class Link implements ILink {
     return false;
   }
 
-  public setStates(origin: State, destiny: State): boolean {
+  setStates(origin: State, destiny: State): boolean {
     if (origin && destiny) {
       this._origin = origin;
       this._destiny = destiny;
@@ -65,27 +65,27 @@ abstract class Link implements ILink {
     return false;
   }
 
-  public getId(): string {
+  getId(): string {
     return this._id;
   }
 
-  public getCaption(): string {
+  getCaption(): string {
     return this._caption;
   }
 
-  public getOrigin(): State {
+  getOrigin(): State {
     return this._origin;
   }
 
-  public getDestiny(): State {
+  getDestiny(): State {
     return this._destiny;
   }
 
-  public toString() : string {
+  toString() : string {
     return `LINK ${this._id}: ${this._caption} - Origin: ${this._origin.getId()}, Destiny: ${this._destiny.getId()}`
   }
 
-  public abstract toJSON() : any;
+  abstract toJSON() : any;
 }
 
 export default Link;

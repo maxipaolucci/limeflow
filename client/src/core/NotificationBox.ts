@@ -20,35 +20,35 @@ class NotificationBox<T> implements INotificationBox<T> {
     this._code = code;
   }
 
-  public setId(id : string): void {
+  setId(id : string): void {
     this._id = id;
   }
 
-  public getId(): string {
+  getId(): string {
     return this._id;
   }
 
-  public getObject(): T {
+  getObject(): T {
     return this._object;
   }
 
-  public setObject(value: T) {
+  setObject(value: T) {
     this._object = value;
   }
 
-  public getMessage(): string {
+  getMessage(): string {
     return this._message;
   }
 
-  public setMessage(value: string) {
+  setMessage(value: string) {
     this._message = value;
   }
 
-  public getCode(): NotificationCode {
+  getCode(): NotificationCode {
     return this._code;
   }
 
-  public setCode(value: NotificationCode) {
+  setCode(value: NotificationCode) {
     this._code = value;
   }
 }

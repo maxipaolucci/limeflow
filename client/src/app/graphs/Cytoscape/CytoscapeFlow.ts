@@ -11,18 +11,23 @@ import CytoscapeState from "./CytoscapeState";
 import CytoscapeLink from "./CytoscapeLink";
 class CytoscapeFlow extends LimeFlow {
 
-  private flowUI : any; //the graph UI (Cytoscape graph instance)
-  private cytoscapeConfigObj : any;
+  private flowUI : any; //the graph UI instance (Cytoscape graph instance)
+  private cytoscapeConfigObj : any; //the cytoscape configuration object
   private cytoscapeInitialisationService : CytoscapeInitialisationService;
 
   constructor(cytoscapeInitialisationService: CytoscapeInitialisationService, id : string, name : string, description? : string) {
-    super(id, description);
+    super(id, name, description);
 
     this.flowUI = null;
     this.cytoscapeConfigObj = null;
     this.cytoscapeInitialisationService = cytoscapeInitialisationService;
   }
 
+  /**
+   * Implementation of the abstract method of LimeFlow.
+   * This generates a Cytoscape graph instanse from json definition of a cytoscape graph.
+   * @returns CytoscapeFlow . The cytoscape flow instance.
+   */
   fromJSON(jsonDefinition : any) : CytoscapeFlow {
     this.cytoscapeConfigObj = jsonDefinition;
 
@@ -45,8 +50,9 @@ class CytoscapeFlow extends LimeFlow {
   }
 
   /**
-   * Implementation of the abstract method of LimeFlow. This generates a json structure accepted by Cytoscape as elements.
-   * @returns JSON . The cytoscape json object to generate a visual graph
+   * Implementation of the abstract method of LimeFlow.
+   * This generates a json structure accepted by Cytoscape as the main config object.
+   * @returns JSON . The cytoscape json object to generate a visual graph.
    */
   toJSON() : any {
     let config : any = {};
@@ -76,10 +82,14 @@ class CytoscapeFlow extends LimeFlow {
    * Returns the workflow UI instance
    * @returns {any}
    */
-  getFlowUI () {
+  getFlowUI() : any {
     return this.flowUI;
   }
 
+  /**
+   * This is the implementation of the observer method this class implements.
+   * @param message : NotificationBox<State> . A package observables shares in Limeflow
+   */
   receiveNotification(message : NotificationBox<State>): void {
     super.receiveNotification(message);
 
@@ -93,6 +103,9 @@ class CytoscapeFlow extends LimeFlow {
     }
   }
 
+  /**
+   * Renders the graph in the screen.
+   */
   render() : void {
     this.flowUI = cytoscape(this.toJSON());
 
@@ -107,10 +120,10 @@ class CytoscapeFlow extends LimeFlow {
   }
 
   /**
-   * Export the cytoscape graph in json format
+   * Generates a json object of the graph rendered in the screen at the moment.
    * @returns {string|any}
    */
-  cyToJSON() : any {
+  cytoscapeToJSON() : any {
     return this.flowUI.json();
   }
 }

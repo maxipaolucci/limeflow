@@ -26,23 +26,23 @@ class Task implements ITask, IObservable {
     this._observers = Array<IObserver>();
   }
 
-  public getDescription() : string {
+  getDescription() : string {
     return this._description;
   }
 
-  public getId() : string {
+  getId() : string {
     return this._id;
   }
 
-  public getName() : string {
+  getName() : string {
     return this._name;
   }
 
-  public getStatus() : number {
+  getStatus() : number {
     return this._status;
   }
 
-  public isRequired() : boolean {
+  isRequired() : boolean {
     return this._required;
   }
 
@@ -50,18 +50,18 @@ class Task implements ITask, IObservable {
    * Completition depends on the task to do, must be marked by an authorized person (we need to add users and permisions)
    */
   //public abstract setComplete();
-  public setComplete() {
+  setComplete() {
     //todo remove this implementation, this method must be abstract
     this._status = Status.Complete;
     let message = new NotificationBox<Task>(this, 'Status changed', NotificationCode.StatusChanged);
     this.notifyObservers(message);
   }
 
-  public setRequired(required : boolean) {
+  setRequired(required : boolean) {
     this._required = required;
   }
 
-  public setStatus(status : number) {
+  setStatus(status : number) {
     if (status !== Status.Complete) {
       this._status = status;
       let message = new NotificationBox<Task>(this, 'Status changed', NotificationCode.StatusChanged);
@@ -69,11 +69,11 @@ class Task implements ITask, IObservable {
     }
   }
 
-  public toString() {
+  toString() {
     return `TASK ${this._id}: ${this._name} - Status: ${Status[this._status]}`;
   }
 
-  public toJSON() : any {
+  toJSON() : any {
     return {
       id : this._id,
       description : this._description,
@@ -83,11 +83,11 @@ class Task implements ITask, IObservable {
     };
   }
 
-  public registerObserver(observer: IObserver): void {
+  registerObserver(observer: IObserver): void {
     this._observers.push(observer);
   }
 
-  public removeObserver(observer: IObserver): void {
+  removeObserver(observer: IObserver): void {
     let i = this._observers.length;
 
     while (i--) {
@@ -97,7 +97,7 @@ class Task implements ITask, IObservable {
     }
   }
 
-  public notifyObservers(message : NotificationBox<Task>): void {
+  notifyObservers(message : NotificationBox<Task>): void {
     for (let observer of this._observers) {
       observer.receiveNotification(message);
     }
