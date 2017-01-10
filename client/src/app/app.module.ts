@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, Title }  from '@angular/platform-browser';
-import { NgRedux, DevToolsExtension } from 'ng2-redux';
+import { NgReduxModule, DevToolsExtension } from 'ng2-redux';
 import {NgReduxRouter} from "ng2-redux-router";
 import { HttpModule } from '@angular/http';
 
@@ -17,9 +17,9 @@ import {LimeFlowComponent} from "./components/lime-flow/limeFlow.component";
 
 
 @NgModule({
-  imports: [ BrowserModule, HttpModule, routing ],
+  imports: [ BrowserModule, HttpModule, routing, NgReduxModule ],
   declarations: [ AppComponent, LimeFlowComponent, VottingComponent, VoteComponent, ResultsComponent ],
   bootstrap: [ AppComponent ],
-  providers: [ Title, NgRedux, NgReduxRouter, DevToolsExtension, VottingActions ]
+  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions ]
 })
 export class AppModule { }

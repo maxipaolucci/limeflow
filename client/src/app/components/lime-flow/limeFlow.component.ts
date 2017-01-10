@@ -27,6 +27,7 @@ export class LimeFlowComponent implements OnInit {
           this.workFlow = new CytoscapeFlow(this,
               this.cytoscapeInitialisationService, 'workFlow', 'This is the workflow');
           this.workFlow.fromJSON(graphJSON).render();
+          this.statusColor = this.workFlow.getCssStatusColor(this.workFlow.getStatus());
           setTimeout(() => {
             this.workFlow.getTaskById('t1').setStatus(6);
           }, 3000);
@@ -39,6 +40,10 @@ export class LimeFlowComponent implements OnInit {
 
   }
 
+  /**
+   * Update the status of the limeFlow component. Useful to set the correct color in the screen and more...
+   * @param status . The current status of the limeflow.
+   */
   updateStatus(status : number) : void {
     this.statusColor = this.workFlow.getCssStatusColor(status);
     console.log(`status updated to ${status}`);
