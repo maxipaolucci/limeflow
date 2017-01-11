@@ -1,7 +1,7 @@
 /**
  * Created by Maxi Paolucci on 12/12/2016.
  */
-import Link from "../../../core/Link";
+import Link from "../../core/Link";
 import CytoscapeState from "./CytoscapeState";
 
 class CytoscapeLink extends Link {

@@ -1,42 +1,41 @@
 /**
  * Created by Maxi Paolucci on 12/12/2016.
  */
-import LimeFlow from "../../../core/LimeFlow";
-import State from "../../../core/State";
-import {CytoscapeInitialisationService} from "../../services/cytoscape-initialisation.service";
-import NotificationBox from "../../../core/NotificationBox";
-import NotificationCode from "../../../core/Constants/NotificationCode";
+import LimeFlow from "../../core/LimeFlow";
+import State from "../../core/State";
+import {CytoscapeInitialisationService} from "../services/cytoscape-initialisation.service";
+import NotificationBox from "../../core/NotificationBox";
+import NotificationCode from "../../core/Constants/NotificationCode";
 import CytoscapeState from "./CytoscapeState";
 import CytoscapeLink from "./CytoscapeLink";
-import {LimeFlowComponent} from "../../components/lime-flow/limeFlow.component";
-import {CssStatusColors} from "../../css-colors";
-import Status from "../../../core/Constants/ElementStatus";
+import Status from "../../core/Constants/ElementStatus";
+import {Subject} from "rxjs";
+import {CytoscapeEventsService} from "../services/cytoscape-events.service";
+import {GraphService} from "../services/graph.service";
+
+
 class CytoscapeFlow extends LimeFlow {
 
-  private componentContainer : LimeFlowComponent;
   private flowUI : any; //the graph UI instance (Cytoscape graph instance)
   private cytoscapeConfigObj : any; //the cytoscape configuration object
   private cytoscapeInitialisationService : CytoscapeInitialisationService;
+  private cytoscapeEventsService : CytoscapeEventsService;
+  private graphService : GraphService;
 
-  constructor(componentContainer : LimeFlowComponent,
-              cytoscapeInitialisationService: CytoscapeInitialisationService,
+  flowStatusSource : Subject<number> = new Subject<number>(); //Observable that handles the workflow status
+
+  constructor(graphService : GraphService,
+              cytoscapeInitialisationService : CytoscapeInitialisationService,
+              cytoscapeEventsService : CytoscapeEventsService,
               id : string, name : string, description? : string) {
     super(id, name, description);
 
-    this.componentContainer = componentContainer;
-    this.flowUI = null;
     this.cytoscapeConfigObj = null;
+    this.flowUI = null;
+    this.flowStatusSource.next(Status.New);
     this.cytoscapeInitialisationService = cytoscapeInitialisationService;
-  }
-
-  /**
-   * Get the css status color from a Status value
-   * @param (Enum<Status>) status . The status of the node
-   *
-   * @returns {string} . The hexa value of the color
-   */
-  public getCssStatusColor(status : number) : string {
-    return CssStatusColors[Status[status]];
+    this.cytoscapeEventsService = cytoscapeEventsService;
+    this.graphService = graphService;
   }
 
   /**
@@ -51,7 +50,7 @@ class CytoscapeFlow extends LimeFlow {
     let edges : Array<any> = jsonDefinition.elements.edges;
 
     for (let node of nodes) {
-      let state = new CytoscapeState(node.data.id, node.data.caption);
+      let state = new CytoscapeState(this.graphService, node.data.id, node.data.caption);
       this.addState(state.fromJSON(node));
     }
 
@@ -108,7 +107,7 @@ class CytoscapeFlow extends LimeFlow {
    */
   receiveNotification(message : NotificationBox<State>): void {
     super.receiveNotification(message);
-    this.componentContainer.updateStatus(this.getStatus());
+    this.flowStatusSource.next(this.getStatus());
 
     //if the notification is a Status changed then we update the color of the node
     if (message.getCode() === NotificationCode.StatusChanged) {
@@ -130,6 +129,9 @@ class CytoscapeFlow extends LimeFlow {
     this.flowUI.panzoom({});
     this.flowUI.userZoomingEnabled(false); //disable zoom by user events like mouse wheel
 
+    //set event listeners
+    this.cytoscapeEventsService.nodeClick(this);
+
     // set color of states.
     this.flowUI.nodes().forEach(( stateUI ) => {
       stateUI.style('background-color', stateUI.data('cssStatusColor'));
@@ -142,6 +144,15 @@ class CytoscapeFlow extends LimeFlow {
    */
   cytoscapeToJSON() : any {
     return this.flowUI.json();
+  }
+
+  /**
+   * Displays the information contained in this state
+   * @param stateID . The id of the state to open.
+   */
+  openState(stateID : string) : void {
+    let state : CytoscapeState = <CytoscapeState>this.getStateById(stateID);
+    console.log(`opening state ${state}`);
   }
 }
 

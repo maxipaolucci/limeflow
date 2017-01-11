@@ -1,8 +1,11 @@
-
-
+/**
+ * Created by Maxi Paolucci on 12/12/2016.
+ */
 import { Injectable }	from '@angular/core';
 import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Rx";
+import {CssStatusColors} from "../css-colors";
+import Status from "../../core/Constants/ElementStatus";
 
 @Injectable()
 export class GraphService {
@@ -33,5 +36,15 @@ export class GraphService {
     }
     console.error(errMsg);
     return Observable.throw(errMsg);
+  }
+
+  /**
+   * Get the css status color from a Status value
+   * @param (Enum<Status>) status . The status of the node
+   *
+   * @returns {string} . The hexa value of the color
+   */
+  public getCssStatusColor(status : number) : string {
+    return CssStatusColors[Status[status]];
   }
 }
