@@ -2,7 +2,7 @@
  * Created by Maxi Paolucci on 12/12/2016.
  */
 import { Injectable }	from '@angular/core';
-import LimeFlow from "../../core/LimeFlow";
+import CytoscapeFlow from "../cytoscape-core/CytoscapeFlow";
 
 
 /**
@@ -11,15 +11,15 @@ import LimeFlow from "../../core/LimeFlow";
 @Injectable()
 export class GraphService {
 
-  private workflow : LimeFlow = null;
+  private workflow : CytoscapeFlow = null;
 
   constructor () {}
 
-  getWorkflow() : LimeFlow {
+  getWorkflow() : CytoscapeFlow {
     return this.workflow;
   }
 
-  setWorkFlow(workflow : LimeFlow) : void {
+  setWorkFlow(workflow : CytoscapeFlow) : void {
     this.workflow = workflow;
   }
 }

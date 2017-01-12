@@ -1,14 +1,14 @@
 /**
  * Created by Maxi Paolucci on 12/12/2016.
  */
-import LimeFlow from "../../core/LimeFlow";
-import State from "../../core/State";
+import LimeFlow from "../../../core/LimeFlow";
+import State from "../../../core/State";
 import {CytoscapeInitialisationService} from "../services/cytoscape-initialisation.service";
-import NotificationBox from "../../core/NotificationBox";
-import NotificationCode from "../../core/Constants/NotificationCode";
+import NotificationBox from "../../../core/NotificationBox";
+import NotificationCode from "../../../core/Constants/NotificationCode";
 import CytoscapeState from "./CytoscapeState";
 import CytoscapeLink from "./CytoscapeLink";
-import Status from "../../core/Constants/ElementStatus";
+import Status from "../../../core/Constants/ElementStatus";
 import {Subject} from "rxjs";
 import {CytoscapeEventsService} from "../services/cytoscape-events.service";
 import {CommonGraphService} from "../services/common-graph.service";

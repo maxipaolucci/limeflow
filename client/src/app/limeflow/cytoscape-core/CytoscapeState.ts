@@ -1,6 +1,6 @@
-import State from "../../core/State";
-import Task from "../../core/Task";
-import NotificationBox from "../../core/NotificationBox";
+import State from "../../../core/State";
+import Task from "../../../core/Task";
+import NotificationBox from "../../../core/NotificationBox";
 import {CommonGraphService} from "../services/common-graph.service";
 /**
  * Created by Maxi Paolucci on 12/12/2016.

@@ -2,7 +2,7 @@
 
 import { Injectable }	from '@angular/core';
 
-import {CssColors, CssStatusColors}  from '../css-colors';
+import {CssColors, CssStatusColors}  from '../../css-colors';
 
 @Injectable()
 export class CytoscapeInitialisationService {

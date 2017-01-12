@@ -11,25 +11,26 @@ import {VoteComponent} from "./components/vote/vote.component";
 import {ResultsComponent} from "./components/results/results.component";
 
 import '../styles.global.scss';
-import {LimeFlowComponent} from "./components/lime-flow/limeFlow.component";
-import {CommonGraphService} from "./services/common-graph.service";
-import {LimeStateComponent} from "./components/lime-state/limeState.component";
 import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
 import {AppRoutingModule} from "./app-routing.module";
+import {LimeflowModule} from "./limeflow/limeflow.module";
 
 
 
 @NgModule({
-  imports: [ BrowserModule, HttpModule, AppRoutingModule, NgReduxModule ],
+  imports: [
+    BrowserModule,
+    HttpModule,
+    LimeflowModule,
+    AppRoutingModule,
+    NgReduxModule ],
   declarations: [
     AppComponent,
     PageNotFoundComponent,
-    LimeFlowComponent,
-    LimeStateComponent,
     VottingComponent,
     VoteComponent,
     ResultsComponent ],
   bootstrap: [ AppComponent ],
-  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions, CommonGraphService ]
+  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions ]
 })
 export class AppModule { }

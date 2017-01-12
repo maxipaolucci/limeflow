@@ -3,18 +3,12 @@
  */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import {LimeFlowComponent} from "./components/lime-flow/limeFlow.component";
 import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
 
 const appRoutes : Routes = [
   {
-    path : 'workflow',
-    component : LimeFlowComponent
-  },
-  {
     path : '',
-    redirectTo : '/workflow',
+    redirectTo : '/limeflow',
     pathMatch : 'full'
   },
   {

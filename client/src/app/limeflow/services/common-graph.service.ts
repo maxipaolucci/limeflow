@@ -4,8 +4,8 @@
 import { Injectable }	from '@angular/core';
 import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Rx";
-import {CssStatusColors} from "../css-colors";
-import Status from "../../core/Constants/ElementStatus";
+import {CssStatusColors} from "../../css-colors";
+import Status from "../../../core/Constants/ElementStatus";
 
 
 /**

@@ -1,12 +1,10 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {CytoscapeInitialisationService} from "../../services/cytoscape-initialisation.service";
-import CytoscapeFlow from "../../cytoscape-core/CytoscapeFlow";
+import {CytoscapeInitialisationService} from "../services/cytoscape-initialisation.service";
+import CytoscapeFlow from "../cytoscape-core/CytoscapeFlow";
 import Status from "../../../core/Constants/ElementStatus";
-import {CytoscapeEventsService} from "../../services/cytoscape-events.service";
-import {CommonGraphService} from "../../services/common-graph.service";
-import {GraphService} from "../../services/graph.service";
-import State from "../../../core/State";
-import CytoscapeState from "../../cytoscape-core/CytoscapeState";
+import {CytoscapeEventsService} from "../services/cytoscape-events.service";
+import {CommonGraphService} from "../services/common-graph.service";
+import {GraphService} from "../services/graph.service";
 
 @Component({
   selector: 'lime-flow',
