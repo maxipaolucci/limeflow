@@ -9,7 +9,6 @@
   padding-bottom: 20px;
 
   #flow-status {
-    color: #ffffff;
 
     .flow-status__color {
       height: 30px;
@@ -19,7 +18,7 @@
     }
   }
 
-  #cy {
+  .cytoscape-graph-container {
     background-color: #000000;
     display: block;
     height: 700px;

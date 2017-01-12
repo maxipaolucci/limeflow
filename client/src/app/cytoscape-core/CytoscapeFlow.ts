@@ -11,31 +11,25 @@ import CytoscapeLink from "./CytoscapeLink";
 import Status from "../../core/Constants/ElementStatus";
 import {Subject} from "rxjs";
 import {CytoscapeEventsService} from "../services/cytoscape-events.service";
-import {GraphService} from "../services/graph.service";
+import {CommonGraphService} from "../services/common-graph.service";
 
 
 class CytoscapeFlow extends LimeFlow {
 
   private flowUI : any; //the graph UI instance (Cytoscape graph instance)
   private cytoscapeConfigObj : any; //the cytoscape configuration object
-  private cytoscapeInitialisationService : CytoscapeInitialisationService;
-  private cytoscapeEventsService : CytoscapeEventsService;
-  private graphService : GraphService;
-
   flowStatusSource : Subject<number> = new Subject<number>(); //Observable that handles the workflow status
+  selectedStateId$ : Subject<string> = new Subject<string>(); //the selected state when the user clicks on a graph node
 
-  constructor(graphService : GraphService,
-              cytoscapeInitialisationService : CytoscapeInitialisationService,
-              cytoscapeEventsService : CytoscapeEventsService,
+  constructor(private commonGraphService : CommonGraphService,
+              private cytoscapeInitialisationService : CytoscapeInitialisationService,
+              private cytoscapeEventsService : CytoscapeEventsService,
               id : string, name : string, description? : string) {
     super(id, name, description);
 
     this.cytoscapeConfigObj = null;
     this.flowUI = null;
     this.flowStatusSource.next(Status.New);
-    this.cytoscapeInitialisationService = cytoscapeInitialisationService;
-    this.cytoscapeEventsService = cytoscapeEventsService;
-    this.graphService = graphService;
   }
 
   /**
@@ -50,7 +44,7 @@ class CytoscapeFlow extends LimeFlow {
     let edges : Array<any> = jsonDefinition.elements.edges;
 
     for (let node of nodes) {
-      let state = new CytoscapeState(this.graphService, node.data.id, node.data.caption);
+      let state = new CytoscapeState(this.commonGraphService, node.data.id, node.data.caption);
       this.addState(state.fromJSON(node));
     }
 
@@ -88,7 +82,9 @@ class CytoscapeFlow extends LimeFlow {
       config.elements = uiElements;
       config.layout = this.cytoscapeInitialisationService.initLayout();
     }
-    config.container = this.cytoscapeInitialisationService.initContainer();
+
+    //set the HTML container
+    config.container = this.cytoscapeInitialisationService.initContainer(this.getId());
 
     return config;
   }
@@ -150,9 +146,8 @@ class CytoscapeFlow extends LimeFlow {
    * Displays the information contained in this state
    * @param stateID . The id of the state to open.
    */
-  openState(stateID : string) : void {
-    let state : CytoscapeState = <CytoscapeState>this.getStateById(stateID);
-    console.log(`opening state ${state}`);
+  selectState(stateId : string) : void {
+    this.selectedStateId$.next(stateId);
   }
 }
 

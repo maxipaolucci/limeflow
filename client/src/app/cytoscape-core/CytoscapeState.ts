@@ -1,22 +1,15 @@
 import State from "../../core/State";
 import Task from "../../core/Task";
-import Status from "../../core/Constants/ElementStatus";
-import {CssStatusColors} from "../css-colors";
-import {Notification} from "rxjs";
 import NotificationBox from "../../core/NotificationBox";
-import {GraphService} from "../services/graph.service";
+import {CommonGraphService} from "../services/common-graph.service";
 /**
  * Created by Maxi Paolucci on 12/12/2016.
  */
 
 class CytoscapeState extends State {
 
-  private graphService : GraphService;
-
-  constructor(graphService : GraphService, id : string, name? : string, description? : string) {
+  constructor(private commonGraphService : CommonGraphService, id : string, name? : string, description? : string) {
     super(id, name, description);
-
-    this.graphService = graphService;
   }
 
   public receiveNotification(message: NotificationBox<Task>): void {
@@ -30,7 +23,7 @@ class CytoscapeState extends State {
         id: this._id,
         caption: this._name,
         status: this._status,
-        cssStatusColor: this.graphService.getCssStatusColor(this._status),
+        cssStatusColor: this.commonGraphService.getCssStatusColor(this._status),
         tasks : this.tasksToJSON()
       }
     };

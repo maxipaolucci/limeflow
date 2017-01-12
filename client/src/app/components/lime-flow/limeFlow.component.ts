@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {CytoscapeInitialisationService} from "../../services/cytoscape-initialisation.service";
 import CytoscapeFlow from "../../cytoscape-core/CytoscapeFlow";
-import {GraphService} from "../../services/graph.service";
 import Status from "../../../core/Constants/ElementStatus";
 import {CytoscapeEventsService} from "../../services/cytoscape-events.service";
+import {CommonGraphService} from "../../services/common-graph.service";
+import {GraphService} from "../../services/graph.service";
+import State from "../../../core/State";
+import CytoscapeState from "../../cytoscape-core/CytoscapeState";
 
 @Component({
   selector: 'lime-flow',
@@ -13,32 +16,43 @@ import {CytoscapeEventsService} from "../../services/cytoscape-events.service";
 })
 export class LimeFlowComponent implements OnInit {
 
+  componentId : string = null; //the component id
   private workFlow : CytoscapeFlow = null; //the graph model
   private statusColor : string = null;
+  private selectedStateId : string = null;
   private data : any = null;
 
   constructor(private graphService : GraphService,
+              private commonGraphService : CommonGraphService,
               private cytoscapeInitialisationService : CytoscapeInitialisationService,
               private cytoscapeEventsService : CytoscapeEventsService) {
 
-    this.statusColor = graphService.getCssStatusColor(Status.New);
+    this.componentId = `limeFlow_${commonGraphService.getNextGraphId()}`;
+    this.statusColor = commonGraphService.getCssStatusColor(Status.New);
   }
 
   ngOnInit() {
-    this.graphService.importGraphJSON('limeflow')
+    this.commonGraphService.importGraphJSON('limeflow')
       .subscribe(
         //load json from a mocked graph
         (graphJSON : any) => {
           //create a new CytoscapeFlow and render it.
           this.workFlow = new CytoscapeFlow(
-              this.graphService,
+              this.commonGraphService,
               this.cytoscapeInitialisationService,
-              this.cytoscapeEventsService, 'workFlow', 'This is the workflow');
+              this.cytoscapeEventsService, this.componentId, 'workFlow', 'This is the workflow');
           this.workFlow.fromJSON(graphJSON).render();
+
+          //set the workflow to the GraphService
+          this.graphService.setWorkFlow(this.workFlow);
 
           //Subscribe to the flowStatusSource to receive updates on workflow status changes
           this.workFlow.flowStatusSource.subscribe((newStatus : number) => {
-            this.statusColor = this.graphService.getCssStatusColor(newStatus);
+            this.statusColor = this.commonGraphService.getCssStatusColor(newStatus);
+          });
+
+          this.workFlow.selectedStateId$.subscribe((stateId : string) => {
+            this.selectedStateId = stateId;
           });
 
           setTimeout(() => {

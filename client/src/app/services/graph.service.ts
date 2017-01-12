@@ -2,49 +2,24 @@
  * Created by Maxi Paolucci on 12/12/2016.
  */
 import { Injectable }	from '@angular/core';
-import {Http, Response} from "@angular/http";
-import {Observable} from "rxjs/Rx";
-import {CssStatusColors} from "../css-colors";
-import Status from "../../core/Constants/ElementStatus";
+import LimeFlow from "../../core/LimeFlow";
 
+
+/**
+ * This service is going to be created as one instance per graph component
+ */
 @Injectable()
 export class GraphService {
-  private mockDataUrl = 'src/data';  // URL to web API
 
-  constructor (private http: Http) {}
+  private workflow : LimeFlow = null;
 
-  public importGraphJSON(filename : string) : Observable<any> {
-    return this.http.get(this.mockDataUrl + `/${filename}.json`)
-    .map(this.extractData)
-    .catch(this.handleError);
+  constructor () {}
+
+  getWorkflow() : LimeFlow {
+    return this.workflow;
   }
 
-  private extractData(res: Response) {
-    let body = res.json();
-    return body.data || { };
-  }
-
-  private handleError (error: Response | any) {
-    // In a real world app, we might use a remote logging infrastructure
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
-  }
-
-  /**
-   * Get the css status color from a Status value
-   * @param (Enum<Status>) status . The status of the node
-   *
-   * @returns {string} . The hexa value of the color
-   */
-  public getCssStatusColor(status : number) : string {
-    return CssStatusColors[Status[status]];
+  setWorkFlow(workflow : LimeFlow) : void {
+    this.workflow = workflow;
   }
 }

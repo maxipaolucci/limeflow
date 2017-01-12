@@ -7,7 +7,11 @@
   padding: 10px;
   display: block;
   height: 100%;
-  font-family: $main-font-family;
+
+  & /deep/ {
+    font-family: $main-font-family;
+    color: $main-font-color;
+  }
 
   nav {
     background-color: $main-purple;
@@ -27,7 +31,7 @@
     }
 
     .app-title {
-      color : $main-font-color;
+      color : $main-title-font-color;
       font-size: 20px;
       font-weight: bold;
       margin: 15px;
@@ -43,7 +47,7 @@
     border: solid 1px #e7e7e7;
     border-radius: 3px;
     background-color: $main-purple;
-    color: $main-font-color;
+    color: $main-title-font-color;
     font-size: 20px;
     font-weight: bold;
     font-family: $main-font-family;

@@ -40,21 +40,21 @@ export class CytoscapeInitialisationService {
 
 	/**
 	 * Init the container cytoscape which will contain the graph.
-	 * @method CytoscapeInitialisationService#initContainer
+	 * @param id : String . The id of the limeflow container to retrieve.
 	 * @returns {HTMLElement} The DOM element which is the container of the graph
 	 */
-	public initContainer() : HTMLElement {
-		this.container = document.getElementById("cy");
+	public initContainer(id : string) : HTMLElement {
+		this.container = document.getElementById(id);
 		return this.container;
 	}
 
 	/**
 	 * Initialize elements of the graph for cytoscape (empty here).
-	 * To add elements : {@link GraphService#addNode}, {@link GraphService#addNodeOnClick}
+	 * To add elements : {@link CommonGraphService#addNode}, {@link CommonGraphService#addNodeOnClick}
 	 * @method CytoscapeInitialisationService#initElements
 	 * @returns {Cy.ElementDefintion[]} The elements of the graph, no elements by default
-	 * @see GraphService#addNode
-	 * @see GraphService#addNodeOnClick
+	 * @see CommonGraphService#addNode
+	 * @see CommonGraphService#addNodeOnClick
 	 */
 	public initElements() : Cy.ElementDefinition[] {
 		this.elements = [];

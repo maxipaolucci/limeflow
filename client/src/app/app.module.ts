@@ -13,13 +13,21 @@ import {routing} from "./app.routing";
 
 import '../styles.global.scss';
 import {LimeFlowComponent} from "./components/lime-flow/limeFlow.component";
+import {CommonGraphService} from "./services/common-graph.service";
+import {LimeStateComponent} from "./components/lime-state/limeState.component";
 
 
 
 @NgModule({
   imports: [ BrowserModule, HttpModule, routing, NgReduxModule ],
-  declarations: [ AppComponent, LimeFlowComponent, VottingComponent, VoteComponent, ResultsComponent ],
+  declarations: [
+    AppComponent,
+    LimeFlowComponent,
+    LimeStateComponent,
+    VottingComponent,
+    VoteComponent,
+    ResultsComponent ],
   bootstrap: [ AppComponent ],
-  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions ]
+  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions, CommonGraphService ]
 })
 export class AppModule { }

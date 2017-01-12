@@ -8,6 +8,8 @@ import ILink from "./ILink";
 interface IState {
 
   getId() : string;
+  getName() : string;
+  getDescription() : string;
   getInputs() : Array<ILink>;
   getOutputs() : Array<ILink>;
   getStatus() : number;

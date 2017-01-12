@@ -5,6 +5,8 @@
 interface ITask {
 
   getId() : string;
+  getName() : string
+  getDescription() : string
   isRequired() : boolean;
   getStatus() : number;
 

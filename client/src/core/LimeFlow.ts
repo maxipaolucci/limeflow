@@ -118,6 +118,10 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
     return this._name;
   }
 
+  getDescription() : string {
+    return this._description;
+  }
+
   getStatus() : number {
     return this._status;
   }

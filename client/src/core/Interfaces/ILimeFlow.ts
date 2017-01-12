@@ -13,6 +13,7 @@ interface ILimeFlow {
   getId() : string;
   getLinkById(id : string) : ILink;
   getName() : string;
+  getDescription() : string;
   getStateById(id : string) : IState;
   getStatus() : number,
   getTaskById(id : string) : ITask;

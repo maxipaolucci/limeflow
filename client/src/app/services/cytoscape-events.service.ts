@@ -22,7 +22,7 @@ export class CytoscapeEventsService {
 				let id = event.cyTarget.data('id');
 				if (id) {
 					//open the node selected
-					cytoscapeFlow.openState(id);
+					cytoscapeFlow.selectState(id);
 				}
 			}
 		});
