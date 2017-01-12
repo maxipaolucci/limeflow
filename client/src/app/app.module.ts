@@ -9,19 +9,21 @@ import {VottingActions} from "./vottingActions.service";
 import {VottingComponent} from "./components/votting/votting.component";
 import {VoteComponent} from "./components/vote/vote.component";
 import {ResultsComponent} from "./components/results/results.component";
-import {routing} from "./app.routing";
 
 import '../styles.global.scss';
 import {LimeFlowComponent} from "./components/lime-flow/limeFlow.component";
 import {CommonGraphService} from "./services/common-graph.service";
 import {LimeStateComponent} from "./components/lime-state/limeState.component";
+import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
+import {AppRoutingModule} from "./app-routing.module";
 
 
 
 @NgModule({
-  imports: [ BrowserModule, HttpModule, routing, NgReduxModule ],
+  imports: [ BrowserModule, HttpModule, AppRoutingModule, NgReduxModule ],
   declarations: [
     AppComponent,
+    PageNotFoundComponent,
     LimeFlowComponent,
     LimeStateComponent,
     VottingComponent,
