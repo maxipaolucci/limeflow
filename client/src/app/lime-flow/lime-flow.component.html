@@ -2,3 +2,4 @@
 <div id="flow-status">Status: <span class="flow-status__color" [ngStyle]="{'background-color': statusColor}">&nbsp;</span></div>
 <div id="{{componentId}}" class="cytoscape-graph-container"></div>
 <lime-state *ngIf="selectedStateId" [stateId]="selectedStateId"></lime-state>
+<router-outlet></router-outlet>

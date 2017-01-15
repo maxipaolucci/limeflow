@@ -13,7 +13,7 @@ import {ResultsComponent} from "./components/results/results.component";
 import '../styles.global.scss';
 import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
 import {AppRoutingModule} from "./app-routing.module";
-import {LimeflowModule} from "./limeflow/limeflow.module";
+import {LimeflowModule} from "./lime-flow/limeflow.module";
 
 
 

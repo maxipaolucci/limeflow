@@ -1,10 +1,10 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {CytoscapeInitialisationService} from "../services/cytoscape-initialisation.service";
-import CytoscapeFlow from "../cytoscape-core/CytoscapeFlow";
-import Status from "../../../core/Constants/ElementStatus";
-import {CytoscapeEventsService} from "../services/cytoscape-events.service";
-import {CommonGraphService} from "../services/common-graph.service";
-import {GraphService} from "../services/graph.service";
+import {Component, OnInit, Input, OnDestroy} from '@angular/core';
+import {CytoscapeInitialisationService} from "./services/cytoscape-initialisation.service";
+import CytoscapeFlow from "./cytoscape-core/CytoscapeFlow";
+import Status from "../../core/Constants/ElementStatus";
+import {CytoscapeEventsService} from "./services/cytoscape-events.service";
+import {CommonGraphService} from "./services/common-graph.service";
+import {GraphService} from "./services/graph.service";
 
 @Component({
   selector: 'lime-flow',
@@ -12,7 +12,7 @@ import {GraphService} from "../services/graph.service";
   styleUrls: ['./limeFlow.component.scss'],
   providers: [ GraphService, CytoscapeInitialisationService, CytoscapeEventsService ]
 })
-export class LimeFlowComponent implements OnInit {
+export class LimeFlowComponent implements OnInit, OnDestroy {
 
   componentId : string = null; //the component id
   private workFlow : CytoscapeFlow = null; //the graph model
@@ -36,9 +36,9 @@ export class LimeFlowComponent implements OnInit {
         (graphJSON : any) => {
           //create a new CytoscapeFlow and render it.
           this.workFlow = new CytoscapeFlow(
-              this.commonGraphService,
-              this.cytoscapeInitialisationService,
-              this.cytoscapeEventsService, this.componentId, 'workFlow', 'This is the workflow');
+            this.commonGraphService,
+            this.cytoscapeInitialisationService,
+            this.cytoscapeEventsService, this.componentId, 'workFlow', 'This is the workflow');
           this.workFlow.fromJSON(graphJSON).render();
 
           //set the workflow to the GraphService
@@ -63,5 +63,11 @@ export class LimeFlowComponent implements OnInit {
         },
         (error : any) =>  console.error(error)
       );
+  }
+
+  ngOnDestroy() {
+    //unsubscribe from observers
+    this.workFlow.flowStatusSource.unsubscribe();
+    this.workFlow.selectedStateId$.unsubscribe();
   }
 }

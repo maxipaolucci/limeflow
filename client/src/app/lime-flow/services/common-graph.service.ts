@@ -31,7 +31,7 @@ export class CommonGraphService {
 
   private extractData(res: Response) : any {
     let body = res.json();
-    return body.data || { };
+    return body.data || {};
   }
 
   private handleError (error: Response | any) {
@@ -58,6 +58,10 @@ export class CommonGraphService {
     return CssStatusColors[Status[status]];
   }
 
+  /**
+   * Returns the nextGraphId value and incrementes the value in 1 unit.
+   * @returns nextId : string . The next id to use in a cytoscape component container
+   */
   getNextGraphId() : string {
     let nextId : string = this.nextGraphId.toString();
     this.nextGraphId += 1;

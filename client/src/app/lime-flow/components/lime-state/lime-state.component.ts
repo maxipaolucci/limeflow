@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from "@angular/core";
-import {GraphService} from "../services/graph.service";
-import CytoscapeState from "../cytoscape-core/CytoscapeState";
+import {GraphService} from "../../services/graph.service";
+import CytoscapeState from "../../cytoscape-core/CytoscapeState";
 
 /**
  * Created by Maxi Paolucci on 11/01/2017.
