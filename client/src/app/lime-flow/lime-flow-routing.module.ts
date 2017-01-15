@@ -3,11 +3,19 @@
  */
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import {LimeFlowComponent} from "./lime-flow.component";
+import {LimeStateComponent} from "./components/lime-state/lime-state.component";
 
 const limeflowRoutes: Routes = [
   {
     path : 'limeflow',
-    component : LimeFlowComponent
+    component : LimeFlowComponent,
+    children : [
+      {
+        path : 'state/:id',
+        component : LimeStateComponent
+      }
+    ]
   }
 ];
 
@@ -19,4 +27,4 @@ const limeflowRoutes: Routes = [
     RouterModule
   ]
 })
-export class LimeflowRoutingModule { }
+export class LimeFlowRoutingModule { }

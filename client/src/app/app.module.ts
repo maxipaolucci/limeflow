@@ -13,7 +13,7 @@ import {ResultsComponent} from "./components/results/results.component";
 import '../styles.global.scss';
 import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
 import {AppRoutingModule} from "./app-routing.module";
-import {LimeflowModule} from "./lime-flow/limeflow.module";
+import {LimeFlowModule} from "./lime-flow/lime-flow.module";
 
 
 
@@ -21,15 +21,17 @@ import {LimeflowModule} from "./lime-flow/limeflow.module";
   imports: [
     BrowserModule,
     HttpModule,
-    LimeflowModule,
+    LimeFlowModule,
     AppRoutingModule,
-    NgReduxModule ],
+    NgReduxModule
+  ],
   declarations: [
     AppComponent,
     PageNotFoundComponent,
     VottingComponent,
     VoteComponent,
-    ResultsComponent ],
+    ResultsComponent
+  ],
   bootstrap: [ AppComponent ],
   providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions ]
 })
