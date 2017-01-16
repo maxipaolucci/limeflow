@@ -17,6 +17,9 @@ interface ILimeFlow {
   getStateById(id : string) : IState;
   getStatus() : number,
   getTaskById(id : string) : ITask;
+  setDescription(description : string) : void;
+  setName(name : string) : void;
+  setStatus(status : number) : void;
   toString() : string;
   toJSON() : any;
   render() : void;

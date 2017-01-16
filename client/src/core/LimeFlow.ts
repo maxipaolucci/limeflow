@@ -12,6 +12,7 @@ import {IObserver} from "./Interfaces/IObserver";
 import NotificationBox from "./NotificationBox";
 
 abstract class LimeFlow implements ILimeFlow, IObserver {
+
   protected _id : string;
   protected _name : string;
   protected _description : string;
@@ -145,6 +146,18 @@ abstract class LimeFlow implements ILimeFlow, IObserver {
    */
   receiveNotification(message: NotificationBox<State>) : void {
     this.updateStatus();
+  }
+
+  setDescription(description : string) : void {
+    this._description = description;
+  }
+
+  setName(name : string) : void {
+    this._name = name;
+  }
+
+  setStatus(status : number) : void {
+    this._status = status;
   }
 
   /**

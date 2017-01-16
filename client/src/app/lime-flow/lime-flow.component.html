@@ -1,5 +1,19 @@
 <!--{{data | json}}-->
-<div class="flow-status">Status: <span class="flow-status__color" [ngStyle]="{'background-color': statusColor}">&nbsp;</span></div>
-<div id="{{componentId}}" class="cytoscape-graph-container"></div>
+<div class="limeflow">
 
-<router-outlet></router-outlet>
+  <section *ngIf="limeflow" class="flow-data">
+    <div class="flow-data-row-1">
+      <h3 class="flow-name">{{limeflow.getName()}}</h3>
+      <div class="flow-status">
+        Status
+        <span class="flow-status__color" [ngStyle]="{'background-color': statusColor}">&nbsp;</span>
+      </div>
+    </div>
+    <p class="flow-data-row-2 flow-description">{{limeflow.getDescription()}}</p>
+  </section>
+
+  <!--Cytoscape flow container-->
+  <div id="{{componentId}}" class="cytoscape-graph-container"></div>
+
+  <router-outlet></router-outlet>
+</div>

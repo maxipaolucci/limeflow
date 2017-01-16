@@ -40,14 +40,22 @@ class CytoscapeFlow extends LimeFlow {
   fromJSON(jsonDefinition : any) : CytoscapeFlow {
     this.cytoscapeConfigObj = jsonDefinition;
 
-    let nodes : Array<any> = jsonDefinition.elements.nodes;
-    let edges : Array<any> = jsonDefinition.elements.edges;
+    //Set Limeflow properties
+    if (jsonDefinition.limeflowData) {
+      this.setName(jsonDefinition.limeflowData.name);
+      this.setDescription(jsonDefinition.limeflowData.description);
+      this.setStatus(jsonDefinition.limeflowData.status);
+    }
 
+    //Create Limeflow States
+    let nodes : Array<any> = jsonDefinition.elements.nodes;
     for (let node of nodes) {
       let state = new CytoscapeState(this.commonGraphService, node.data.id, node.data.caption);
       this.addState(state.fromJSON(node));
     }
 
+    //Create Limeflow Links
+    let edges : Array<any> = jsonDefinition.elements.edges;
     for (let edge of edges) {
       let link = new CytoscapeLink(edge.data.id,
         <CytoscapeState>this.getStateById(edge.data.source),
@@ -60,7 +68,9 @@ class CytoscapeFlow extends LimeFlow {
 
   /**
    * Implementation of the abstract method of LimeFlow.
-   * This generates a json structure accepted by Cytoscape as the main config object.
+   * Generates a JSON definition of the Limeflow instance.
+   * The generated JSON structure is written in a format accepted by Cytoscape
+   * as the main config object.
    * @returns JSON . The cytoscape json object to generate a visual graph.
    */
   toJSON() : any {
@@ -136,10 +146,18 @@ class CytoscapeFlow extends LimeFlow {
 
   /**
    * Generates a json object of the graph rendered in the screen at the moment.
-   * @returns {string|any}
+   * This JSON object has the cytoscape JSON structure with some additional data for Limeflow.
+   * @returns any . The JSOM of the graph.
    */
-  cytoscapeToJSON() : any {
-    return this.flowUI.json();
+  exportAsJSON() : any {
+    let jsonDefinition = this.flowUI.json();
+    jsonDefinition.limeflowData = {
+      name : this.getName(),
+      description : this.getDescription(),
+      status : this.getStatus(),
+      id : this.getId()
+    };
+    return jsonDefinition;
   }
 
   /**

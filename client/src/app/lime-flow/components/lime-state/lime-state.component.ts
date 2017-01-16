@@ -37,7 +37,7 @@ export class LimeStateComponent implements OnInit {
       // limeflow is not created yet. The user access this component directly by url so we redirect him to /limeflow passing it
       // an optional stateId parameter (the one looked for in the url) to create a workflow and be redirected again to
       // the state component with the state id provided the first time.
-      console.warn(`${methodTrace} The workflow is not defined. Cannot retrieve a state from it. Redirecting to /limeflow...`);
+      console.warn(`${methodTrace} The workflow is not defined yet. Cannot retrieve a state from it. Redirecting to /limeflow...`);
       this.router.navigate(['/limeflow', { stateId : this.route.snapshot.params['id'] } ]);
     }
   }

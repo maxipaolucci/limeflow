@@ -7,21 +7,43 @@
   flex-direction: column;
   padding-bottom: 20px;
 
-  .flow-status {
+  .flow-data {
+    display: flex;
+    flex-direction: column;
 
-    .flow-status__color {
-      height: 30px;
-      width: 30px;
-      border-radius: 3px;
-      display: inline-block;
+    .flow-data-row-1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .flow-name {
+        margin: 0;
+      }
+
+      .flow-status {
+        display: flex;
+        align-items: center;
+
+        .flow-status__color {
+          height: 30px;
+          width: 30px;
+          border-radius: 3px;
+          display: inline-block;
+          margin-left: 10px;
+        }
+      }
     }
   }
 
   .cytoscape-graph-container {
     background-color: #000000;
     display: block;
-    height: 700px;
-    margin-bottom: 20px;
+    height: 400px;
+    margin: 0 0 10px;
+    padding: 10px 0;
+    border-top: 1px solid $main-pink;
+    border-bottom: 1px solid $main-pink;
+    overflow: hidden;
   }
 
   @media (max-width: $screen-xs-max) { }

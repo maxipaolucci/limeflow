@@ -16,8 +16,8 @@ import {Router, ActivatedRoute, Params} from "@angular/router";
 export class LimeFlowComponent implements OnInit, OnDestroy {
 
   componentId : string = null; //the component id
-  private workFlow : CytoscapeFlow = null; //the graph model
-  private statusColor : string = null;
+  private limeflow : CytoscapeFlow; //the graph model
+  private statusColor : string;
   private data : any = null;
 
   constructor(
@@ -30,6 +30,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
 
     this.componentId = `limeFlow_${commonGraphService.getNextGraphId()}`;
     this.statusColor = commonGraphService.getCssStatusColor(Status.New);
+    this.limeflow = null;
   }
 
   ngOnInit() {
@@ -40,22 +41,22 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
         //load json from a mocked graph
         (graphJSON : any) => {
           //create a new CytoscapeFlow and render it.
-          this.workFlow = new CytoscapeFlow(
+          this.limeflow = new CytoscapeFlow(
             this.commonGraphService,
             this.cytoscapeInitialisationService,
-            this.cytoscapeEventsService, this.componentId, 'workFlow', 'This is the workflow');
-          this.workFlow.fromJSON(graphJSON).render();
+            this.cytoscapeEventsService, this.componentId, null);
+          this.limeflow.fromJSON(graphJSON).render();
 
           //set the workflow to the GraphService
-          this.graphService.setWorkFlow(this.workFlow);
+          this.graphService.setWorkFlow(this.limeflow);
 
           //Subscribe to the flowStatusSource to receive updates on workflow status changes
-          this.workFlow.flowStatusSource.subscribe((newStatus : number) => {
+          this.limeflow.flowStatusSource.subscribe((newStatus : number) => {
             this.statusColor = this.commonGraphService.getCssStatusColor(newStatus);
           });
 
           //Subscribe to the selectedStateId Observer to receive updatos on the state clicked and show its content
-          this.workFlow.selectedStateId$.subscribe((stateId : string) => {
+          this.limeflow.selectedStateId$.subscribe((stateId : string) => {
             this.router.navigate(['/limeflow/state', stateId]);
           });
 
@@ -71,20 +72,20 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
           }
 
           setTimeout(() => {
-            this.workFlow.getTaskById('t1').setStatus(6);
+            this.limeflow.getTaskById('t1').setStatus(6);
           }, 3000);
           //just used to get a json model to save as mocks
-          //this.data = this.workFlow.exportJSON();
+          //this.data = this.workFlow.exportAsJSON();
           //console.log(this.data);
 
         },
-        (error : any) =>  console.error(error)
+        (error : any) =>  console.error(`${methodTrace} ${error}`)
       );
   }
 
   ngOnDestroy() {
     //unsubscribe from observers
-    this.workFlow.flowStatusSource.unsubscribe();
-    this.workFlow.selectedStateId$.unsubscribe();
+    this.limeflow.flowStatusSource.unsubscribe();
+    this.limeflow.selectedStateId$.unsubscribe();
   }
 }
