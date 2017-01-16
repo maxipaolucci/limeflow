@@ -5,10 +5,9 @@
   //limeFlow-component
   display: flex;
   flex-direction: column;
-  height: 650px;
   padding-bottom: 20px;
 
-  #flow-status {
+  .flow-status {
 
     .flow-status__color {
       height: 30px;
