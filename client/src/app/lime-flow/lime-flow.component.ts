@@ -67,12 +67,17 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
           // Use snapshot (no-observable alternative) because this parameter is going to be read once from the URL when
           // the user is redirected from the state component to the limeflow one to create it.
           if (this.route.snapshot.params['stateId']) {
-            console.info(`${methodTrace} Optional stateId param provided: ${this.route.snapshot.params['stateId']}. Navigating to that state...`);
-            this.router.navigate(['/limeflow/state', this.route.snapshot.params['stateId']]);
+            if (this.route.snapshot.params['taskId']) {
+              console.info(`${methodTrace} Optional taskId param provided: ${this.route.snapshot.params['taskId']}. Navigating to that task...`);
+              this.router.navigate(['/limeflow/state', this.route.snapshot.params['stateId'], 'task', this.route.snapshot.params['taskId']]);
+            } else {
+              console.info(`${methodTrace} Optional stateId param provided: ${this.route.snapshot.params['stateId']}. Navigating to that state...`);
+              this.router.navigate(['/limeflow/state', this.route.snapshot.params['stateId']]);
+            }
           }
 
           setTimeout(() => {
-            this.limeflow.getTaskById('t1').setStatus(6);
+            this.limeflow.getTaskById('t1').setStatus(3);
           }, 3000);
           //just used to get a json model to save as mocks
           //this.data = this.workFlow.exportAsJSON();

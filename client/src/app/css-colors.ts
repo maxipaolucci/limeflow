@@ -29,12 +29,12 @@ export const CssColors = {
 
 
 //Node Status Color
-export type CssStatusColors = "#AAD5FF" | "#FFF06C" | "#98FF7A" | "#CFA0FF" | "#D1CECD" | "#FF8C94";
+export type CssStatusColors = "#AAD5FF" | "#FFF06C" | "#ADFF2F" | "#CFA0FF" | "#D1CECD" | "#FF8C94";
 
 export const CssStatusColors = {
     New : "#AAD5FF" as CssStatusColors,
     InProgress : "#FFF06C" as CssStatusColors,
-    Done : "#98FF7A" as CssStatusColors,
+    Done : "#ADFF2F" as CssStatusColors,
     Complete : "#CFA0FF" as CssStatusColors,
     Stop : "#D1CECD" as CssStatusColors,
     Block : "#FF8C94" as CssStatusColors

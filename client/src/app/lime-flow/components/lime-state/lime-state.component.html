@@ -1,9 +1,15 @@
 <div *ngIf="state">
   <h4 class="state-title">{{state.getName()}}</h4>
   <ul class="state-tasks-list">
-    <li class="state-task" *ngFor="let task of state.getTasks()">
-      <h5 class="state-task__title">{{task.toString()}}</h5>
+    <li class="state-task"
+        *ngFor="let task of state.getTasks()"
+        [ngStyle]="{'border-color': commonGraphService.getCssStatusColor(task.getStatus())}"
+        (click)="goToTask(task)"    >
+      <h5 class="state-task__title">{{task.getName()}}</h5>
       <p class="state-task__description">{{task.getDescription()}}</p>
     </li>
   </ul>
 </div>
+
+<!--The main outlet to display tasks-->
+<router-outlet></router-outlet>

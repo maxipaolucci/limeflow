@@ -12,6 +12,10 @@ const appRoutes : Routes = [
     pathMatch : 'full'
   },
   {
+    path : 'page-not-found',
+    component : PageNotFoundComponent
+  },
+  {
     path : '**',
     component : PageNotFoundComponent
   }

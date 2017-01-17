@@ -2,30 +2,8 @@
 @import "../../../scss/_variables";
 
 :host {
-  //lime-state-component
-  .state-title {
-    font-weight: bold;
-  }
+  //lime-task-component
 
-  .state-tasks-list {
-
-    padding: 0;
-
-    .state-task {
-      display: flex;
-      flex-direction: column;
-      padding-left: 10px;
-      padding-top: 2px;
-      border-left: 20px solid;
-      border-bottom: 1px dashed;
-      margin-bottom: 10px;
-
-      .state-task__title {
-        margin-top: 0;
-        font-weight: bold;
-      }
-    }
-  }
 
 
   @media (max-width: $screen-xs-max) { }
