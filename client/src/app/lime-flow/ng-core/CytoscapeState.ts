@@ -2,6 +2,7 @@ import State from "../../../core/State";
 import Task from "../../../core/Task";
 import NotificationBox from "../../../core/NotificationBox";
 import {CommonGraphService} from "../services/common-graph.service";
+import NgLimeTask from "./NgLimeTask";
 /**
  * Created by Maxi Paolucci on 12/12/2016.
  */
@@ -35,8 +36,9 @@ class CytoscapeState extends State {
     this._status = jsonDefinition.data.status;
 
     for (let task of jsonDefinition.data.tasks) {
-      let t = new Task(task.id, task.required, task.name, task.description);
+      let t = new NgLimeTask(task.id, task.required, task.name, task.description);
       t.setStatus(task.status);
+      t.setUrlToComponent(task.urlToComponent);
       this.registerTask(t);
     }
 

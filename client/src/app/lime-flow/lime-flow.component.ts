@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {CytoscapeInitialisationService} from "./services/cytoscape-initialisation.service";
-import CytoscapeFlow from "./cytoscape-core/CytoscapeFlow";
+import CytoscapeFlow from "./ng-core/CytoscapeFlow";
 import Status from "../../core/Constants/ElementStatus";
 import {CytoscapeEventsService} from "./services/cytoscape-events.service";
 import {CommonGraphService} from "./services/common-graph.service";
@@ -55,7 +55,9 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
             this.statusColor = this.commonGraphService.getCssStatusColor(newStatus);
           });
 
-          //Subscribe to the selectedStateId Observer to receive updatos on the state clicked and show its content
+          // Subscribe to the selectedStateId Observer to receive updatos on the state clicked and show its content.
+          // We do this navigation here because the click event occurs in the CytoscapeFlow object
+          // with no router instance.
           this.limeflow.selectedStateId$.subscribe((stateId : string) => {
             this.router.navigate(['/limeflow/state', stateId]);
           });

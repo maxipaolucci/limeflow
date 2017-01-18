@@ -1,10 +1,10 @@
 import {Component, OnInit, Input} from "@angular/core";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import {GraphService} from "../../services/graph.service";
-import CytoscapeState from "../../cytoscape-core/CytoscapeState";
-import CytoscapeFlow from "../../cytoscape-core/CytoscapeFlow";
+import CytoscapeState from "../../ng-core/CytoscapeState";
+import CytoscapeFlow from "../../ng-core/CytoscapeFlow";
+import NgLimeTask from "../../ng-core/NgLimeTask";
 import {CommonGraphService} from "../../services/common-graph.service";
-import Task from "../../../../core/Task";
 
 /**
  * Created by Maxi Paolucci on 11/01/2017.
@@ -49,7 +49,8 @@ export class LimeStateComponent implements OnInit {
     }
   }
 
-  goToTask(task : Task) {
-    this.router.navigate(['/limeflow/state', this.state.getId(), 'task', task.getId()]);
+  goToTask(task : NgLimeTask) {
+    //this.router.navigate(['/limeflow/state', this.state.getId(), 'task', task.getId()]);
+    this.router.navigate([task.getUrlToComponent(), { task : task }]);
   }
 }

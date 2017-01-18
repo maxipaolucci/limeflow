@@ -19,7 +19,8 @@
             "description": "Description for task 1",
             "name": "Tarea 1",
             "required": true,
-            "status": 1
+            "status": 1,
+            "urlToComponent" : "/task/t1"
           }]
         },
         "position": {
@@ -44,13 +45,15 @@
             "description": "Description for task 2",
             "name": "Tarea 2",
             "required": true,
-            "status": 1
+            "status": 1,
+            "urlToComponent" : "/task/t2"
           }, {
             "id": "t3",
             "description": "Description for task 3",
             "name": "Tarea 3",
             "required": true,
-            "status": 1
+            "status": 1,
+            "urlToComponent" : "/task/t3"
           }]
         },
         "position": {

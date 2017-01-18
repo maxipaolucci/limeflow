@@ -2,7 +2,7 @@
  * Created by Maxi Paolucci on 12/12/2016.
  */
 import { Injectable }	from '@angular/core';
-import CytoscapeFlow from "../cytoscape-core/CytoscapeFlow";
+import CytoscapeFlow from "../ng-core/CytoscapeFlow";
 
 
 /**

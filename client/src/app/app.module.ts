@@ -14,6 +14,7 @@ import '../styles.global.scss';
 import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
 import {AppRoutingModule} from "./app-routing.module";
 import {LimeFlowModule} from "./lime-flow/lime-flow.module";
+import {T1Component} from "./components/tasks/t1/t1.component";
 
 
 
@@ -27,6 +28,7 @@ import {LimeFlowModule} from "./lime-flow/lime-flow.module";
   ],
   declarations: [
     AppComponent,
+    T1Component,
     PageNotFoundComponent,
     VottingComponent,
     VoteComponent,
