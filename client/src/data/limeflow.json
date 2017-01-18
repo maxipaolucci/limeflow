@@ -53,7 +53,7 @@
             "name": "Tarea 3",
             "required": true,
             "status": 1,
-            "urlToComponent" : "/task/t3"
+            "urlToComponent" : null
           }]
         },
         "position": {

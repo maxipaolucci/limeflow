@@ -50,7 +50,12 @@ export class LimeStateComponent implements OnInit {
   }
 
   goToTask(task : NgLimeTask) {
-    //this.router.navigate(['/limeflow/state', this.state.getId(), 'task', task.getId()]);
-    this.router.navigate([task.getUrlToComponent(), { task : task }]);
+    if (task.getUrlToComponent()) {
+      //if the task has an urlToComponent set then navigate there
+      this.router.navigate([task.getUrlToComponent(), { taskId : task.getId() }]);
+    } else {
+      //if no urlToComponent set in the task then navigate to the task component provided by limeflow
+      this.router.navigate(['/limeflow/state', this.state.getId(), 'task', task.getId()]);
+    }
   }
 }
