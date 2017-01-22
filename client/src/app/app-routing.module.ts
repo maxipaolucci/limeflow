@@ -7,11 +7,11 @@ import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.co
 import {T1Component} from "./components/tasks/t1/t1.component";
 
 const appRoutes : Routes = [
-  {
-    path : '',
-    redirectTo : '/limeflow',
-    pathMatch : 'full'
-  },
+  // {
+  //   path : '',
+  //   redirectTo : '/limeflow',
+  //   pathMatch : 'full'
+  // },
   {
     path : 'task/t1',
     component : T1Component
@@ -19,11 +19,12 @@ const appRoutes : Routes = [
   {
     path : 'page-not-found',
     component : PageNotFoundComponent
-  },
-  {
-    path : '**',
-    component : PageNotFoundComponent
   }
+  // ,
+  // {
+  //   path : '**',
+  //   component : PageNotFoundComponent
+  // }
 ];
 
 @NgModule({

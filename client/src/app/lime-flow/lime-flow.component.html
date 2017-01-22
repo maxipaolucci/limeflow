@@ -1,20 +1,21 @@
 <!--{{data | json}}-->
 <div class="limeflow">
 
-  <section *ngIf="limeflow" class="flow-data">
-    <div class="flow-data-row-1">
-      <h3 class="flow-name">{{limeflow.getName()}}</h3>
-      <div class="flow-status">
-        Status
-        <span class="flow-status__color" [ngStyle]="{'background-color': statusColor}">&nbsp;</span>
+  <section class="limeflow-container" *ngIf="render">
+    <div *ngIf="limeflow" class="flow-data">
+      <div class="flow-data-row-1">
+        <h3 class="flow-name">{{limeflow.getName()}}</h3>
+        <div class="flow-status">
+          Status
+          <span class="flow-status__color" [ngStyle]="{'background-color': statusColor}">&nbsp;</span>
+        </div>
       </div>
+      <p class="flow-data-row-2 flow-description">{{limeflow.getDescription()}}</p>
     </div>
-    <p class="flow-data-row-2 flow-description">{{limeflow.getDescription()}}</p>
+
+    <!--Cytoscape flow container-->
+    <div id="{{componentId}}" class="cytoscape-graph-container"></div>
   </section>
-
-  <!--Cytoscape flow container-->
-  <div id="{{componentId}}" class="cytoscape-graph-container"></div>
-
   <!--The main outlet to display states-->
   <router-outlet></router-outlet>
 </div>

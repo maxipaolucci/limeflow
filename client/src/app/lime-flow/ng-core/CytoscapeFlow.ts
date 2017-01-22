@@ -16,6 +16,7 @@ import {CommonGraphService} from "../services/common-graph.service";
 
 class CytoscapeFlow extends LimeFlow {
 
+  private allowRendering : boolean; //if true this instance is renderizable in the screen.
   private flowUI : any; //the graph UI instance (Cytoscape graph instance)
   private cytoscapeConfigObj : any; //the cytoscape configuration object
   flowStatusSource : Subject<number> = new Subject<number>(); //Observable that handles the workflow status
@@ -24,12 +25,13 @@ class CytoscapeFlow extends LimeFlow {
   constructor(private commonGraphService : CommonGraphService,
               private cytoscapeInitialisationService : CytoscapeInitialisationService,
               private cytoscapeEventsService : CytoscapeEventsService,
-              id : string, name : string, description? : string) {
+              id : string, allowRendering : boolean, name : string, description? : string) {
     super(id, name, description);
 
     this.cytoscapeConfigObj = null;
     this.flowUI = null;
     this.flowStatusSource.next(Status.New);
+    this.allowRendering = allowRendering;
   }
 
   /**
@@ -116,7 +118,7 @@ class CytoscapeFlow extends LimeFlow {
     this.flowStatusSource.next(this.getStatus());
 
     //if the notification is a Status changed then we update the color of the node
-    if (message.getCode() === NotificationCode.StatusChanged) {
+    if (this.allowRendering && message.getCode() === NotificationCode.StatusChanged) {
       let state : State = message.getObject();
       let stateUI : any = this.flowUI.getElementById(state.getId());
 
@@ -129,19 +131,21 @@ class CytoscapeFlow extends LimeFlow {
    * Renders the graph in the screen.
    */
   render() : void {
-    this.flowUI = cytoscape(this.toJSON());
+    if (this.allowRendering) {
+      this.flowUI = cytoscape(this.toJSON());
 
-    // Initialize panzoom plugin
-    this.flowUI.panzoom({});
-    this.flowUI.userZoomingEnabled(false); //disable zoom by user events like mouse wheel
+      // Initialize panzoom plugin
+      this.flowUI.panzoom({});
+      this.flowUI.userZoomingEnabled(false); //disable zoom by user events like mouse wheel
 
-    //set event listeners
-    this.cytoscapeEventsService.nodeClick(this);
+      //set event listeners
+      this.cytoscapeEventsService.nodeClick(this);
 
-    // set color of states.
-    this.flowUI.nodes().forEach(( stateUI ) => {
-      stateUI.style('background-color', stateUI.data('cssStatusColor'));
-    });
+      // set color of states.
+      this.flowUI.nodes().forEach(( stateUI ) => {
+        stateUI.style('background-color', stateUI.data('cssStatusColor'));
+      });
+    }
   }
 
   /**

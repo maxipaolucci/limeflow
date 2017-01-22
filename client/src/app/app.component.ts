@@ -12,6 +12,8 @@ import reduxLogger from '../model/configureLogger';
 import { __DEVMODE__ } from "../constants/config";
 import {VottingActions} from "./vottingActions.service";
 import {VottingMiddleware} from "./vottingMiddleware.service";
+import {BehaviorSubject} from "rxjs/Rx";
+import CytoscapeFlow from "./lime-flow/ng-core/CytoscapeFlow";
 
 
 @Component({
@@ -23,6 +25,8 @@ import {VottingMiddleware} from "./vottingMiddleware.service";
 export class AppComponent implements OnInit {
   title : string = "LimeFlow App";
   socket : any = null;
+  private limeflow$ : BehaviorSubject<CytoscapeFlow>;
+  private limeflow : CytoscapeFlow;
   
   constructor(
     private titleService : Title,
@@ -31,6 +35,9 @@ export class AppComponent implements OnInit {
     private devTools: DevToolsExtension,
     private vottingActions: VottingActions,
     private vottingMiddleware: VottingMiddleware) {
+
+    this.limeflow$ = null;
+    this.limeflow = null;
 
     //set title
     this.titleService.setTitle(this.title);
@@ -55,5 +62,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.socket.on('state', (state : any) => this.vottingActions.setState(state) ); //set a callback for 'state' events in socket
+  }
+
+  onGetFlow(limeflow$ : BehaviorSubject<CytoscapeFlow>) {
+    this.limeflow$ = limeflow$;
+    this.limeflow$.subscribe(flow => this.limeflow = flow);
   }
 }

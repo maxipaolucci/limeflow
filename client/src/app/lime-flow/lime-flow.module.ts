@@ -18,6 +18,7 @@ import {LimeNotFoundComponent} from "./components/lime-not-found/lime-not-found.
     LimeTaskComponent,
     LimeNotFoundComponent
   ],
-  providers: [ CommonGraphService ]
+  providers: [ CommonGraphService ],
+  exports: [ LimeFlowComponent ]
 })
 export class LimeFlowModule { }

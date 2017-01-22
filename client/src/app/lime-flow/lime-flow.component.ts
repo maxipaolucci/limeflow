@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import {CytoscapeInitialisationService} from "./services/cytoscape-initialisation.service";
 import CytoscapeFlow from "./ng-core/CytoscapeFlow";
 import Status from "../../core/Constants/ElementStatus";
@@ -6,6 +6,8 @@ import {CytoscapeEventsService} from "./services/cytoscape-events.service";
 import {CommonGraphService} from "./services/common-graph.service";
 import {GraphService} from "./services/graph.service";
 import {Router, ActivatedRoute, Params} from "@angular/router";
+import {BehaviorSubject} from "rxjs/Rx";
+
 
 @Component({
   selector: 'lime-flow',
@@ -17,8 +19,12 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
 
   componentId : string = null; //the component id
   private limeflow : CytoscapeFlow; //the graph model
+  private limeflow$ : BehaviorSubject<CytoscapeFlow>;
   private statusColor : string;
   private data : any = null;
+  @Input() filename : string;
+  @Input() render : boolean;
+  @Output() getflow : EventEmitter<BehaviorSubject<CytoscapeFlow>>;
 
   constructor(
       private route: ActivatedRoute,
@@ -31,11 +37,14 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
     this.componentId = `limeFlow_${commonGraphService.getNextGraphId()}`;
     this.statusColor = commonGraphService.getCssStatusColor(Status.New);
     this.limeflow = null;
+    this.limeflow$ = new BehaviorSubject<CytoscapeFlow>(null); //initialize with null
+    this.getflow = new EventEmitter<BehaviorSubject<CytoscapeFlow>>();
   }
 
   ngOnInit() {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
-
+    console.log(this.filename, this.render);
+    this.getflow.emit(this.limeflow$); //emit the limeflow Observable
     this.commonGraphService.importGraphJSON('limeflow')
       .subscribe(
         //load json from a mocked graph
@@ -44,8 +53,15 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
           this.limeflow = new CytoscapeFlow(
             this.commonGraphService,
             this.cytoscapeInitialisationService,
-            this.cytoscapeEventsService, this.componentId, null);
-          this.limeflow.fromJSON(graphJSON).render();
+            this.cytoscapeEventsService, this.componentId, this.render, null);
+          this.limeflow.fromJSON(graphJSON);
+
+          if (this.render) {
+            this.limeflow.render();
+          }
+
+          //notify observers about the new limeflow loaded from JSON file.
+          this.limeflow$.next(this.limeflow);
 
           //set the workflow to the GraphService
           this.graphService.setWorkFlow(this.limeflow);
