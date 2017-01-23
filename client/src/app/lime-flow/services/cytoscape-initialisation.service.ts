@@ -7,12 +7,6 @@ import {CssColors, CssStatusColors}  from '../../css-colors';
 @Injectable()
 export class CytoscapeInitialisationService {
 	/**
-	 * The DOM element which contains the graph.
-	 * @member {HTMLElement} CytoscapeInitialisationService#container
-	 */
-	container: HTMLElement;
-
-	/**
 	 * Elements of the graph.
 	 * @member {Cy.ElementDefinition[]} CytoscapeInitialisationService#elements
 	 */
@@ -23,12 +17,6 @@ export class CytoscapeInitialisationService {
 	 * @member {Cy.Stylesheet[]} CytoscapeInitialisationService#style
 	 */
 	style: Cy.Stylesheet[];
-
-	/**
-	 * Layout of the graph.
-	 * @member {Cy.LayoutOptions} CytoscapeInitialisationService#layout
-	 */
-	layout: Cy.LayoutOptions;
 
 	/**
 	 * Constructor.
@@ -43,9 +31,8 @@ export class CytoscapeInitialisationService {
 	 * @param id : String . The id of the limeflow container to retrieve.
 	 * @returns {HTMLElement} The DOM element which is the container of the graph
 	 */
-	public initContainer(id : string) : HTMLElement {
-		this.container = document.getElementById(id);
-		return this.container;
+	static initContainer(id : string) : HTMLElement {
+		return document.getElementById(id);
 	}
 
 	/**
@@ -56,7 +43,7 @@ export class CytoscapeInitialisationService {
 	 * @see CommonGraphService#addNode
 	 * @see CommonGraphService#addNodeOnClick
 	 */
-	public initElements() : Cy.ElementDefinition[] {
+	initElements() : Cy.ElementDefinition[] {
 		this.elements = [];
 		return this.elements;
 	}
@@ -69,7 +56,7 @@ export class CytoscapeInitialisationService {
 	 * @returns {Cy.Stylesheet[]} The stylesheet containing all css classes
 	 * @see CssColors
 	 */
-	public initStyleSheet() : Cy.Stylesheet[] {
+	initStyleSheet() : Cy.Stylesheet[] {
 		this.style = [ // the stylesheet for the graph
 			{
 				selector: "node", // The selector to know what element to apply style
@@ -151,12 +138,10 @@ export class CytoscapeInitialisationService {
 	 * @method CytoscapeInitialisationService#initLayout
 	 * 
 	 */
-	public initLayout() : Cy.LayoutOptions {
-		this.layout = {
+	static initLayout() : Cy.LayoutOptions {
+		return {
 			name: 'grid' // layout to explicitly set the position of each node on the graph
 		}
-
-		return this.layout;
 	}
 
 	/**
@@ -165,11 +150,9 @@ export class CytoscapeInitialisationService {
 	 * @method CytoscapeInitialisationService#initLayout
 	 * @param layout : String . The layout to set
 	 */
-	public setLayout(layout : string) : Cy.LayoutOptions {
-		this.layout = {
+	static setLayout(layout : string) : Cy.LayoutOptions {
+		return {
 			name: layout
 		}
-
-		return this.layout;
 	}
 }

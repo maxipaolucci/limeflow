@@ -64,8 +64,17 @@ export class AppComponent implements OnInit {
     this.socket.on('state', (state : any) => this.vottingActions.setState(state) ); //set a callback for 'state' events in socket
   }
 
+  ngOnDestroy() {
+    //unsubscribe from observers
+    this.limeflow$.unsubscribe();
+  }
+
   onGetFlow(limeflow$ : BehaviorSubject<CytoscapeFlow>) {
+    let methodTrace = `${this.constructor.name} > onGetFlow() > `; //for debugging
     this.limeflow$ = limeflow$;
-    this.limeflow$.subscribe(flow => this.limeflow = flow);
+    this.limeflow$.subscribe(flow => {
+      this.limeflow = flow;
+      console.info(`${methodTrace} ${this.limeflow}`);
+    });
   }
 }

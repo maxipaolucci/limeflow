@@ -22,10 +22,7 @@ class CytoscapeFlow extends LimeFlow {
   flowStatusSource : Subject<number> = new Subject<number>(); //Observable that handles the workflow status
   selectedStateId$ : Subject<string> = new Subject<string>(); //the selected state when the user clicks on a graph node
 
-  constructor(private commonGraphService : CommonGraphService,
-              private cytoscapeInitialisationService : CytoscapeInitialisationService,
-              private cytoscapeEventsService : CytoscapeEventsService,
-              id : string, allowRendering : boolean, name : string, description? : string) {
+  constructor(id : string, allowRendering : boolean, name : string, description? : string) {
     super(id, name, description);
 
     this.cytoscapeConfigObj = null;
@@ -52,7 +49,7 @@ class CytoscapeFlow extends LimeFlow {
     //Create Limeflow States
     let nodes : Array<any> = jsonDefinition.elements.nodes;
     for (let node of nodes) {
-      let state = new CytoscapeState(this.commonGraphService, node.data.id, node.data.caption);
+      let state = new CytoscapeState(node.data.id, node.data.caption);
       this.addState(state.fromJSON(node));
     }
 
@@ -79,7 +76,7 @@ class CytoscapeFlow extends LimeFlow {
     let config : any = {};
     if (this.cytoscapeConfigObj) {
       config = this.cytoscapeConfigObj;
-      config.layout = this.cytoscapeInitialisationService.setLayout('preset');
+      config.layout = CytoscapeInitialisationService.setLayout('preset');
     } else {
       let uiElements : Array<any> = Array<any>();
 
@@ -92,11 +89,11 @@ class CytoscapeFlow extends LimeFlow {
       }
 
       config.elements = uiElements;
-      config.layout = this.cytoscapeInitialisationService.initLayout();
+      config.layout = CytoscapeInitialisationService.initLayout();
     }
 
     //set the HTML container
-    config.container = this.cytoscapeInitialisationService.initContainer(this.getId());
+    config.container = CytoscapeInitialisationService.initContainer(this.getId());
 
     return config;
   }
@@ -139,7 +136,7 @@ class CytoscapeFlow extends LimeFlow {
       this.flowUI.userZoomingEnabled(false); //disable zoom by user events like mouse wheel
 
       //set event listeners
-      this.cytoscapeEventsService.nodeClick(this);
+      CytoscapeEventsService.nodeClick(this);
 
       // set color of states.
       this.flowUI.nodes().forEach(( stateUI ) => {

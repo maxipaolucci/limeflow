@@ -1,11 +1,9 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import {CytoscapeInitialisationService} from "./services/cytoscape-initialisation.service";
 import CytoscapeFlow from "./ng-core/CytoscapeFlow";
 import Status from "../../core/Constants/ElementStatus";
-import {CytoscapeEventsService} from "./services/cytoscape-events.service";
 import {CommonGraphService} from "./services/common-graph.service";
 import {GraphService} from "./services/graph.service";
-import {Router, ActivatedRoute, Params} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import {BehaviorSubject} from "rxjs/Rx";
 
 
@@ -13,7 +11,7 @@ import {BehaviorSubject} from "rxjs/Rx";
   selector: 'lime-flow',
   templateUrl: './lime-flow.component.html',
   styleUrls: ['./lime-flow.component.scss'],
-  providers: [ GraphService, CytoscapeInitialisationService, CytoscapeEventsService ]
+  providers: [ GraphService ]
 })
 export class LimeFlowComponent implements OnInit, OnDestroy {
 
@@ -23,19 +21,17 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
   private statusColor : string;
   private data : any = null;
   @Input() filename : string;
-  @Input() render : boolean;
+  @Input() render : boolean = true;
   @Output() getflow : EventEmitter<BehaviorSubject<CytoscapeFlow>>;
 
   constructor(
       private route: ActivatedRoute,
       private router: Router,
       private graphService : GraphService,
-      private commonGraphService : CommonGraphService,
-      private cytoscapeInitialisationService : CytoscapeInitialisationService,
-      private cytoscapeEventsService : CytoscapeEventsService) {
+      private commonGraphService : CommonGraphService) {
 
     this.componentId = `limeFlow_${commonGraphService.getNextGraphId()}`;
-    this.statusColor = commonGraphService.getCssStatusColor(Status.New);
+    this.statusColor = CommonGraphService.getCssStatusColor(Status.New);
     this.limeflow = null;
     this.limeflow$ = new BehaviorSubject<CytoscapeFlow>(null); //initialize with null
     this.getflow = new EventEmitter<BehaviorSubject<CytoscapeFlow>>();
@@ -43,17 +39,14 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
-    console.log(this.filename, this.render);
     this.getflow.emit(this.limeflow$); //emit the limeflow Observable
-    this.commonGraphService.importGraphJSON('limeflow')
+    //import from file
+    this.commonGraphService.importGraphJSON(this.filename)
       .subscribe(
         //load json from a mocked graph
         (graphJSON : any) => {
           //create a new CytoscapeFlow and render it.
-          this.limeflow = new CytoscapeFlow(
-            this.commonGraphService,
-            this.cytoscapeInitialisationService,
-            this.cytoscapeEventsService, this.componentId, this.render, null);
+          this.limeflow = new CytoscapeFlow(this.componentId, this.render, null);
           this.limeflow.fromJSON(graphJSON);
 
           if (this.render) {
@@ -68,7 +61,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
 
           //Subscribe to the flowStatusSource to receive updates on workflow status changes
           this.limeflow.flowStatusSource.subscribe((newStatus : number) => {
-            this.statusColor = this.commonGraphService.getCssStatusColor(newStatus);
+            this.statusColor = CommonGraphService.getCssStatusColor(newStatus);
           });
 
           // Subscribe to the selectedStateId Observer to receive updatos on the state clicked and show its content.
@@ -102,7 +95,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
           //console.log(this.data);
 
         },
-        (error : any) =>  console.error(`${methodTrace} ${error}`)
+        (error : any) =>  console.error(`${methodTrace} There was an error trying to load file: ${this.filename} > ${error}`)
       );
   }
 

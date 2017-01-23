@@ -54,7 +54,7 @@ export class CommonGraphService {
    *
    * @returns {string} . The hexa value of the color
    */
-  getCssStatusColor(status : number) : string {
+  static getCssStatusColor(status : number) : string {
     return CssStatusColors[Status[status]];
   }
 

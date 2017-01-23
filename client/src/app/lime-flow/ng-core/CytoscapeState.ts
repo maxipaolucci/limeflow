@@ -9,7 +9,7 @@ import NgLimeTask from "./NgLimeTask";
 
 class CytoscapeState extends State {
 
-  constructor(private commonGraphService : CommonGraphService, id : string, name? : string, description? : string) {
+  constructor(id : string, name? : string, description? : string) {
     super(id, name, description);
   }
 
@@ -24,7 +24,7 @@ class CytoscapeState extends State {
         id: this._id,
         caption: this._name,
         status: this._status,
-        cssStatusColor: this.commonGraphService.getCssStatusColor(this._status),
+        cssStatusColor: CommonGraphService.getCssStatusColor(this._status),
         tasks : this.tasksToJSON()
       }
     };

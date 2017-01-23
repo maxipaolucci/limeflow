@@ -14,7 +14,7 @@ export class CytoscapeEventsService {
 	 */
 	constructor() {}
 
-	nodeClick(cytoscapeFlow : CytoscapeFlow) : void {
+	static nodeClick(cytoscapeFlow : CytoscapeFlow) : void {
 		cytoscapeFlow.getFlowUI().on('click', 'node', event => {
 			// Check if it's a zone with a node where the click was performed
 			if(event.cyTarget.data != null) {
