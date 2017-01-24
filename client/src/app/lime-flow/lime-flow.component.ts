@@ -11,7 +11,7 @@ import {BehaviorSubject} from "rxjs/Rx";
   selector: 'lime-flow',
   templateUrl: './lime-flow.component.html',
   styleUrls: ['./lime-flow.component.scss'],
-  providers: [ GraphService ]
+  //providers: [ GraphService ]
 })
 export class LimeFlowComponent implements OnInit, OnDestroy {
 
@@ -39,6 +39,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
+    console.log(`${methodTrace} ${this.filename}`)
     this.getflow.emit(this.limeflow$); //emit the limeflow Observable
     //import from file
     this.commonGraphService.importGraphJSON(this.filename)
@@ -59,8 +60,8 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
           //set the workflow to the GraphService
           this.graphService.setWorkFlow(this.limeflow);
 
-          //Subscribe to the flowStatusSource to receive updates on workflow status changes
-          this.limeflow.flowStatusSource.subscribe((newStatus : number) => {
+          //Subscribe to the flowStatus$ to receive updates on workflow status changes
+          this.limeflow.flowStatus$.subscribe((newStatus : number) => {
             this.statusColor = CommonGraphService.getCssStatusColor(newStatus);
           });
 
@@ -101,7 +102,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     //unsubscribe from observers
-    this.limeflow.flowStatusSource.unsubscribe();
+    this.limeflow.flowStatus$.unsubscribe();
     this.limeflow.selectedStateId$.unsubscribe();
   }
 }

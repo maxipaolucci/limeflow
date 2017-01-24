@@ -4,7 +4,7 @@
     <li class="state-task"
         *ngFor="let task of state.getTasks()"
         [ngStyle]="{
-            'border-color': commonGraphService.getCssStatusColor(task.getStatus()
+            'border-color': getCssStatusColor(task.getStatus()
         )}"
         (click)="goToTask(task)">
       <h5 class="state-task__title">{{task.getName()}}</h5>

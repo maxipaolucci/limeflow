@@ -61,6 +61,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(`${this.constructor.name} > ngOnInit() > `)
     this.socket.on('state', (state : any) => this.vottingActions.setState(state) ); //set a callback for 'state' events in socket
   }
 

@@ -10,24 +10,22 @@ import {LimeNotFoundComponent} from "./components/lime-not-found/lime-not-found.
 
 const limeflowRoutes: Routes = [
   {
-    path : 'limeflow',
-    component : LimeFlowComponent,
+    path: 'limeflow',
+    component: LimeFlowComponent
+  },
+  {
+    path : 'limeflow/state/:stateId',
+    component : LimeStateComponent,
     children : [
       {
-        path : 'state/:stateId',
-        component : LimeStateComponent,
-        children : [
-          {
-            path : 'task/:taskId',
-            component : LimeTaskComponent
-          }
-        ]
-      },
-      {
-        path : 'lime-not-found',
-        component : LimeNotFoundComponent
+        path : 'task/:taskId',
+        component : LimeTaskComponent
       }
     ]
+  },
+  {
+    path : 'lime-not-found',
+    component : LimeNotFoundComponent
   }
 ];
 

@@ -19,7 +19,7 @@ class CytoscapeFlow extends LimeFlow {
   private allowRendering : boolean; //if true this instance is renderizable in the screen.
   private flowUI : any; //the graph UI instance (Cytoscape graph instance)
   private cytoscapeConfigObj : any; //the cytoscape configuration object
-  flowStatusSource : Subject<number> = new Subject<number>(); //Observable that handles the workflow status
+  flowStatus$ : Subject<number> = new Subject<number>(); //Observable that handles the workflow status
   selectedStateId$ : Subject<string> = new Subject<string>(); //the selected state when the user clicks on a graph node
 
   constructor(id : string, allowRendering : boolean, name : string, description? : string) {
@@ -27,7 +27,7 @@ class CytoscapeFlow extends LimeFlow {
 
     this.cytoscapeConfigObj = null;
     this.flowUI = null;
-    this.flowStatusSource.next(Status.New);
+    this.flowStatus$.next(Status.New);
     this.allowRendering = allowRendering;
   }
 
@@ -112,7 +112,7 @@ class CytoscapeFlow extends LimeFlow {
    */
   receiveNotification(message : NotificationBox<State>): void {
     super.receiveNotification(message);
-    this.flowStatusSource.next(this.getStatus());
+    this.flowStatus$.next(this.getStatus());
 
     //if the notification is a Status changed then we update the color of the node
     if (this.allowRendering && message.getCode() === NotificationCode.StatusChanged) {

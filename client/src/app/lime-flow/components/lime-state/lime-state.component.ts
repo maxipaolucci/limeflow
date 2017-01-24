@@ -21,7 +21,6 @@ export class LimeStateComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private commonGraphService : CommonGraphService,
               private graphService : GraphService) {
 
   }
@@ -30,10 +29,12 @@ export class LimeStateComponent implements OnInit {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
 
     this.limeflow = this.graphService.getWorkflow();
+    console.log(`${methodTrace} ${this.limeflow}`);
     if (this.limeflow) {
       // subscribe to the stateId parameter to make the state in this component match always the state with the id provided
       this.route.params.subscribe((params: Params) => {
         this.state = <CytoscapeState>this.limeflow.getStateById(params['stateId']);
+        console.log(this.state);
         if (!this.state) {
           console.error(`${methodTrace} The workflow has not got a State with the provided ID: ${params['stateId']}.`);
           this.router.navigate(['/limeflow/lime-not-found', {componentType : 'State', componentId : params['stateId']}] );
@@ -57,5 +58,14 @@ export class LimeStateComponent implements OnInit {
       //if no urlToComponent set in the task then navigate to the task component provided by limeflow
       this.router.navigate(['/limeflow/state', this.state.getId(), 'task', task.getId()]);
     }
+  }
+
+  /**
+   * Return the status color for a status value.
+   * @param status . The value provided
+   * @returns {string} . The Hex code as string of the status color
+   */
+  getCssStatusColor(status : number) : string {
+    return CommonGraphService.getCssStatusColor(status);
   }
 }
