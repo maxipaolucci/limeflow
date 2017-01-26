@@ -39,7 +39,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
-    console.log(`${methodTrace} ${this.filename}`)
+
     this.getflow.emit(this.limeflow$); //emit the limeflow Observable
     //import from file
     this.commonGraphService.importGraphJSON(this.filename)
@@ -54,11 +54,10 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
             this.limeflow.render();
           }
 
-          //notify observers about the new limeflow loaded from JSON file.
-          this.limeflow$.next(this.limeflow);
-
           //set the workflow to the GraphService
           this.graphService.setWorkFlow(this.limeflow);
+          //notify observers about the new limeflow loaded from JSON file.
+          this.limeflow$.next(this.limeflow);
 
           //Subscribe to the flowStatus$ to receive updates on workflow status changes
           this.limeflow.flowStatus$.subscribe((newStatus : number) => {
@@ -71,22 +70,6 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
           this.limeflow.selectedStateId$.subscribe((stateId : string) => {
             this.router.navigate(['/limeflow/state', stateId]);
           });
-
-          // Check the url for an optional stateId parameter and redirect to that state. This stateId param (optional)
-          // is present when the user is navigating directly to a state by URL. As the workflow is not created yet then
-          // the state component redirect to the limeflow component with this optional parameter to create a workflow
-          // and redirect the user to the state that he was looking for from the beginning.
-          // Use snapshot (no-observable alternative) because this parameter is going to be read once from the URL when
-          // the user is redirected from the state component to the limeflow one to create it.
-          if (this.route.snapshot.params['stateId']) {
-            if (this.route.snapshot.params['taskId']) {
-              console.info(`${methodTrace} Optional taskId param provided: ${this.route.snapshot.params['taskId']}. Navigating to that task...`);
-              this.router.navigate(['/limeflow/state', this.route.snapshot.params['stateId'], 'task', this.route.snapshot.params['taskId']]);
-            } else {
-              console.info(`${methodTrace} Optional stateId param provided: ${this.route.snapshot.params['stateId']}. Navigating to that state...`);
-              this.router.navigate(['/limeflow/state', this.route.snapshot.params['stateId']]);
-            }
-          }
 
           setTimeout(() => {
             this.limeflow.getTaskById('t1').setStatus(3);

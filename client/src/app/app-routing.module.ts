@@ -21,10 +21,10 @@ const appRoutes : Routes = [
     path : 'page-not-found',
     component : PageNotFoundComponent
   },
-  // {
-  //   path : '**',
-  //   component : PageNotFoundComponent
-  // }
+  {
+    path : '**',
+    component : PageNotFoundComponent
+  }
 ];
 
 @NgModule({

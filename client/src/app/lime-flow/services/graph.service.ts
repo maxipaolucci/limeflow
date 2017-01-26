@@ -3,6 +3,7 @@
  */
 import { Injectable }	from '@angular/core';
 import CytoscapeFlow from "../ng-core/CytoscapeFlow";
+import {BehaviorSubject} from "rxjs/Rx";
 
 
 /**
@@ -12,8 +13,11 @@ import CytoscapeFlow from "../ng-core/CytoscapeFlow";
 export class GraphService {
 
   private workflow : CytoscapeFlow = null;
+  workflow$ : BehaviorSubject<CytoscapeFlow> = null;
 
-  constructor () {}
+  constructor () {
+    this.workflow$ = new BehaviorSubject<CytoscapeFlow>(null);
+  }
 
   getWorkflow() : CytoscapeFlow {
     return this.workflow;
@@ -21,5 +25,6 @@ export class GraphService {
 
   setWorkFlow(workflow : CytoscapeFlow) : void {
     this.workflow = workflow;
+    this.workflow$.next(this.workflow);
   }
 }

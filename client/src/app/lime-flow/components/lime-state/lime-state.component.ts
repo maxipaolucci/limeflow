@@ -5,6 +5,8 @@ import CytoscapeState from "../../ng-core/CytoscapeState";
 import CytoscapeFlow from "../../ng-core/CytoscapeFlow";
 import NgLimeTask from "../../ng-core/NgLimeTask";
 import {CommonGraphService} from "../../services/common-graph.service";
+import {BehaviorSubject, Subject} from "rxjs/Rx";
+import {LIMEFLOW_$_TIMEOUT} from "../../constants/constants";
 
 /**
  * Created by Maxi Paolucci on 11/01/2017.
@@ -16,48 +18,69 @@ import {CommonGraphService} from "../../services/common-graph.service";
 })
 export class LimeStateComponent implements OnInit {
 
-  private limeflow : CytoscapeFlow = null;
-  private state : CytoscapeState = null;
+  private limeflow : CytoscapeFlow;
+  private limeflow$ : BehaviorSubject<CytoscapeFlow>;
+  private state : CytoscapeState;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private graphService : GraphService) {
 
+    this.limeflow$ = this.graphService.workflow$;
+    this.limeflow = null;
+    this.state = null;
   }
 
   ngOnInit() : void {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
 
     this.limeflow = this.graphService.getWorkflow();
-    console.log(`${methodTrace} ${this.limeflow}`);
-    if (this.limeflow) {
-      // subscribe to the stateId parameter to make the state in this component match always the state with the id provided
-      this.route.params.subscribe((params: Params) => {
-        this.state = <CytoscapeState>this.limeflow.getStateById(params['stateId']);
-        console.log(this.state);
-        if (!this.state) {
-          console.error(`${methodTrace} The workflow has not got a State with the provided ID: ${params['stateId']}.`);
-          this.router.navigate(['/limeflow/lime-not-found', {componentType : 'State', componentId : params['stateId']}] );
+    let stateId = null;
+
+    // subscribe to the stateId parameter to make the state in this component match always the state with the id provided
+    this.route.params.flatMap((params : Params) => {
+        stateId = params['stateId'];
+        if (this.limeflow) {
+          return this.limeflow$ = new BehaviorSubject<CytoscapeFlow>(this.limeflow);
+        } else {
+          return this.limeflow$ = <BehaviorSubject<CytoscapeFlow>>this.graphService.workflow$;
         }
-      });
-    } else {
-      let stateId = this.route.snapshot.params['stateId'];
-      // limeflow is not created yet. The user access this component directly by url so we redirect him to /limeflow passing it
-      // an optional stateId parameter (the one looked for in the url) to create a workflow and be redirected again to
-      // the state component with the state id provided the first time.
-      console.warn(`${methodTrace} The workflow is not defined yet. Cannot retrieve state "${stateId}" from it. Redirecting to /limeflow...`);
-      this.router.navigate(['/limeflow', { stateId : stateId } ]);
+      }).filter((flow : CytoscapeFlow) => flow !== null) //filter null values
+        .subscribe((flow : CytoscapeFlow) => {
+          this.limeflow = flow;
+          this.setState(stateId);
+        }, error => {
+          console.error(`${methodTrace}limeflow$ subscription timeout (20s) ocurred. ${error}`);
+        }, () => {
+          console.info(`${methodTrace}limeflow$ subscription completed.`);
+        });
+  }
+
+  /**
+   * Set the state of the component
+   * @param stateId . The state id neccessary to retrieve a State instance from Limeflow
+   */
+  private setState(stateId : string) : void {
+    let methodTrace = `${this.constructor.name} > setState(${stateId}) > `; //for debugging
+    if (this.limeflow) {
+      this.state = this.limeflow.getStateById(stateId);
+      if (!this.state) {
+        console.error(`${methodTrace} The workflow has not got a State with the provided ID: ${stateId}.`);
+        this.router.navigate(['/limeflow/lime-not-found', {componentType: 'State', componentId: stateId}]);
+      }
     }
   }
 
   goToTask(task : NgLimeTask) {
+    let methodTrace = `${this.constructor.name} > goToTask() > `; //for debugging
     if (task.getUrlToComponent()) {
       //if the task has an urlToComponent set then navigate there
-      this.router.navigate([task.getUrlToComponent(), { taskId : task.getId() }]);
-    } else {
-      //if no urlToComponent set in the task then navigate to the task component provided by limeflow
-      this.router.navigate(['/limeflow/state', this.state.getId(), 'task', task.getId()]);
+      return this.router.navigate([task.getUrlToComponent()]);
     }
+
+    console.error(`${methodTrace}The task does not have a url set in the graph definition (check urlToComponent 
+      property in task json object in the graph json definition).`);
+    this.router.navigate(['/limeflow/lime-not-found', {componentType: 'Task', componentId: task.getId()}]);
   }
 
   /**
@@ -67,5 +90,9 @@ export class LimeStateComponent implements OnInit {
    */
   getCssStatusColor(status : number) : string {
     return CommonGraphService.getCssStatusColor(status);
+  }
+
+  ngOnDestroy() {
+    this.limeflow$.unsubscribe();
   }
 }
