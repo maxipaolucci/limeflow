@@ -14,6 +14,7 @@ import {VottingActions} from "./vottingActions.service";
 import {VottingMiddleware} from "./vottingMiddleware.service";
 import {BehaviorSubject} from "rxjs/Rx";
 import CytoscapeFlow from "./lime-flow/ng-core/CytoscapeFlow";
+import {AppGraphService} from "./services/app.graph.service";
 
 
 @Component({
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
   
   constructor(
     private titleService : Title,
+    private appGraphService : AppGraphService,
     private ngRedux: NgRedux<IAppState>,
     private ngReduxRouter: NgReduxRouter,
     private devTools: DevToolsExtension,
@@ -74,6 +76,7 @@ export class AppComponent implements OnInit {
     this.limeflow$ = limeflow$;
     this.limeflow$.subscribe(flow => {
       this.limeflow = flow;
+      this.appGraphService.setWorkFlow(this.limeflow);
       console.info(`${methodTrace} ${this.limeflow}`);
     });
   }

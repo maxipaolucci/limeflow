@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, OnDestroy} from "@angular/core";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import {GraphService} from "../../services/graph.service";
 import CytoscapeState from "../../ng-core/CytoscapeState";
@@ -16,7 +16,7 @@ import {LIMEFLOW_$_TIMEOUT} from "../../constants/constants";
   templateUrl: './lime-state.component.html',
   styleUrls: ['./lime-state.component.scss'],
 })
-export class LimeStateComponent implements OnInit {
+export class LimeStateComponent implements OnInit, OnDestroy {
 
   private limeflow : CytoscapeFlow;
   private limeflow$ : BehaviorSubject<CytoscapeFlow>;
@@ -71,6 +71,11 @@ export class LimeStateComponent implements OnInit {
     }
   }
 
+  /**
+   * Navigates the user directly to the task component url. This feature requires that the task<NgLimeTask> selected has a
+   * url defined to where to look at it.
+   * @param task : NgLimeTask . The task to go to.
+   */
   goToTask(task : NgLimeTask) {
     let methodTrace = `${this.constructor.name} > goToTask() > `; //for debugging
     if (task.getUrlToComponent()) {

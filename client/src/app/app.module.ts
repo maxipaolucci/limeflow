@@ -15,6 +15,7 @@ import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.co
 import {AppRoutingModule} from "./app-routing.module";
 import {LimeFlowModule} from "./lime-flow/lime-flow.module";
 import {T1Component} from "./components/tasks/t1/t1.component";
+import {AppGraphService} from "./services/app.graph.service";
 
 
 
@@ -35,6 +36,6 @@ import {T1Component} from "./components/tasks/t1/t1.component";
     ResultsComponent
   ],
   bootstrap: [ AppComponent ],
-  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions ]
+  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions, AppGraphService ]
 })
 export class AppModule { }
