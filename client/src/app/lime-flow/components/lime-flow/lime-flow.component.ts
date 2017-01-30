@@ -1,8 +1,8 @@
 import {Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import CytoscapeFlow from "./ng-core/CytoscapeFlow";
-import Status from "../../core/Constants/ElementStatus";
-import {CommonGraphService} from "./services/common-graph.service";
-import {GraphService} from "./services/graph.service";
+import CytoscapeFlow from "../../ng-core/CytoscapeFlow";
+import Status from "../../../../core/Constants/ElementStatus";
+import {CommonGraphService} from "../../services/common-graph.service";
+import {GraphService} from "../../services/graph.service";
 import {Router, ActivatedRoute} from "@angular/router";
 import {BehaviorSubject} from "rxjs/Rx";
 

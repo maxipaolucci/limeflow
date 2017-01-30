@@ -13,9 +13,9 @@ import {ResultsComponent} from "./components/results/results.component";
 import '../styles.global.scss';
 import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
 import {AppRoutingModule} from "./app-routing.module";
-import {LimeFlowModule} from "./lime-flow/lime-flow.module";
 import {T1Component} from "./components/tasks/t1/t1.component";
 import {AppGraphService} from "./services/app.graph.service";
+import {LimeFlowAppModule} from "./lime-flow/lime-flow-app.module";
 
 
 
@@ -23,7 +23,7 @@ import {AppGraphService} from "./services/app.graph.service";
   imports: [
     BrowserModule,
     HttpModule,
-    LimeFlowModule,
+    LimeFlowAppModule,
     AppRoutingModule,
     NgReduxModule
   ],
