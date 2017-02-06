@@ -4,25 +4,25 @@ import Status from "../../core/Constants/ElementStatus";
 import {CommonGraphService} from "./services/common-graph.service";
 import {GraphService} from "./services/graph.service";
 import {Router, ActivatedRoute} from "@angular/router";
-import {BehaviorSubject} from "rxjs/Rx";
+import {BehaviorSubject, Subscription} from "rxjs/Rx";
 
 
 @Component({
   selector: 'lime-flow',
   templateUrl: './lime-flow.component.html',
-  styleUrls: ['./lime-flow.component.scss'],
-  //providers: [ GraphService ]
+  styleUrls: ['./lime-flow.component.scss']
 })
 export class LimeFlowComponent implements OnInit, OnDestroy {
 
-  componentId : string = null; //the component id
-  private limeflow : CytoscapeFlow; //the graph model
-  private limeflow$ : BehaviorSubject<CytoscapeFlow>;
-  private statusColor : string;
-  private data : any = null;
+  @Input() id : string;
   @Input() filename : string;
   @Input() render : boolean = true;
   @Output() getflow : EventEmitter<BehaviorSubject<CytoscapeFlow>>;
+
+  private limeflow : CytoscapeFlow; //the graph model
+  private statusColor : string;
+  private limeflowStatusSubscriber : Subscription;
+  private limeflowStateIdSubscriber : Subscription;
 
   constructor(
       private route: ActivatedRoute,
@@ -30,62 +30,66 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
       private graphService : GraphService,
       private commonGraphService : CommonGraphService) {
 
-    this.componentId = `limeFlow_${commonGraphService.getNextGraphId()}`;
     this.statusColor = CommonGraphService.getCssStatusColor(Status.New);
     this.limeflow = null;
-    this.limeflow$ = new BehaviorSubject<CytoscapeFlow>(null); //initialize with null
     this.getflow = new EventEmitter<BehaviorSubject<CytoscapeFlow>>();
+    this.limeflowStateIdSubscriber = null;
+    this.limeflowStatusSubscriber = null;
   }
 
   ngOnInit() {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
 
-    this.getflow.emit(this.limeflow$); //emit the limeflow Observable
+    this.graphService.registerWorkflow(this.id, null);
+    this.getflow.emit(this.graphService.getWorkflow$(this.id)); //emit the limeflow Observable
     //import from file
     this.commonGraphService.importGraphJSON(this.filename)
-      .subscribe(
+      .map(
         //load json from a mocked graph
         (graphJSON : any) => {
           //create a new CytoscapeFlow and render it.
-          this.limeflow = new CytoscapeFlow(this.componentId, this.render, null);
-          this.limeflow.fromJSON(graphJSON);
+          let flow : CytoscapeFlow = new CytoscapeFlow(this.id, this.render, null);
+          flow.fromJSON(graphJSON);
 
           if (this.render) {
-            this.limeflow.render();
+            flow.render();
           }
 
-          //set the workflow to the GraphService
-          this.graphService.setWorkFlow(this.limeflow);
-          //notify observers about the new limeflow loaded from JSON file.
-          this.limeflow$.next(this.limeflow);
+          //set the workflow to the GraphService and notify observers to the graphservice workflow$
+          console.log(this.id);
+          this.graphService.setWorkflow(this.id, flow);
 
-          //Subscribe to the flowStatus$ to receive updates on workflow status changes
-          this.limeflow.flowStatus$.subscribe((newStatus : number) => {
-            this.statusColor = CommonGraphService.getCssStatusColor(newStatus);
-          });
+          return flow;
+        }
+      ).subscribe(flow => {
+        this.limeflow = flow;
+        //Subscribe to the flowStatus$ to receive updates on workflow status changes
+        this.limeflowStatusSubscriber = this.limeflow.flowStatus$.subscribe((newStatus : number) => {
+          this.statusColor = CommonGraphService.getCssStatusColor(newStatus);
+        });
 
-          // Subscribe to the selectedStateId Observer to receive updatos on the state clicked and show its content.
-          // We do this navigation here because the click event occurs in the CytoscapeFlow object
-          // with no router instance.
-          this.limeflow.selectedStateId$.subscribe((stateId : string) => {
-            this.router.navigate(['/limeflow/state', stateId]);
-          });
+        // Subscribe to the selectedStateId Observer to receive updatos on the state clicked and show its content.
+        // We do this navigation here because the click event occurs in the CytoscapeFlow object
+        // with no router instance.
+        this.limeflowStateIdSubscriber = this.limeflow.selectedStateId$.subscribe((stateId : string) => {
+          this.router.navigate(['/', this.id, 'state', stateId]);
+        });
 
-          setTimeout(() => {
-            this.limeflow.getTaskById('t1').setStatus(3);
-          }, 3000);
-          //just used to get a json model to save as mocks
-          //this.data = this.workFlow.exportAsJSON();
-          //console.log(this.data);
-
-        },
-        (error : any) =>  console.error(`${methodTrace} There was an error trying to load file: ${this.filename} > ${error}`)
-      );
+        setTimeout(() => {
+          this.limeflow.getTaskById('t1').setStatus(3);
+        }, 3000);
+        //just used to get a json model to save as mocks
+        //this.data = this.workFlow.exportAsJSON();
+        //console.log(this.data);
+      }
+      , (error : any) =>  console.error(`${methodTrace} There was an error trying to load file: ${this.filename} > ${error}`));
   }
 
   ngOnDestroy() {
+    let methodTrace = `${this.constructor.name} > ngOnDestroy() > `; //for debugging
+    console.info(`${methodTrace} Method called`);
     //unsubscribe from observers
-    this.limeflow.flowStatus$.unsubscribe();
-    this.limeflow.selectedStateId$.unsubscribe();
+    this.limeflowStatusSubscriber.unsubscribe();
+    this.limeflowStateIdSubscriber.unsubscribe();
   }
 }

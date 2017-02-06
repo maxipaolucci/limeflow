@@ -52,6 +52,11 @@ export class T1Component implements OnInit, OnDestroy {
         });
   }
 
+  onGetFlow(limeflow$ : BehaviorSubject<CytoscapeFlow>) {
+    let methodTrace = `${this.constructor.name} > onGetFlow() > `; //for debugging
+
+  }
+
   ngOnDestroy() {
 
   }

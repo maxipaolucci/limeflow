@@ -10,6 +10,11 @@
 </nav>
 
 <div class="app-main-container">
-  <lime-flow [filename]="'limeflow'" [render]="true" (getflow)="onGetFlow($event)"></lime-flow>
+  <lime-flow [id]="'limeflow_3456'"
+             [filename]="'limeflow'"
+             [render]="true"
+             (getflow)="onGetFlow($event)">
+  </lime-flow>
   <router-outlet></router-outlet>
+
 </div>

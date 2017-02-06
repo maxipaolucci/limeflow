@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {PageNotFoundComponent} from "./components/page-not-found/pageNotFound.component";
 import {T1Component} from "./components/tasks/t1/t1.component";
-import {AppComponent} from "./app.component";
 
 const appRoutes : Routes = [
   // {

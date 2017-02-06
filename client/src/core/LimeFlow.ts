@@ -1,7 +1,6 @@
 /**
  * Created by Maxi Paolucci on 27/11/2016.
  */
-
 import ILimeFlow from './Interfaces/ILimeFlow';
 import Status from "./Constants/ElementStatus";
 import State from "./State";

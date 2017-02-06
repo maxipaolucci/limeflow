@@ -19,14 +19,12 @@ import {LIMEFLOW_$_TIMEOUT} from "../../constants/constants";
 export class LimeStateComponent implements OnInit, OnDestroy {
 
   private limeflow : CytoscapeFlow;
-  private limeflow$ : BehaviorSubject<CytoscapeFlow>;
   private state : CytoscapeState;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private graphService : GraphService) {
 
-    this.limeflow$ = this.graphService.workflow$;
     this.limeflow = null;
     this.state = null;
   }
@@ -34,26 +32,31 @@ export class LimeStateComponent implements OnInit, OnDestroy {
   ngOnInit() : void {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
 
-    this.limeflow = this.graphService.getWorkflow();
     let stateId = null;
+    let flowId = null;
 
     // subscribe to the stateId parameter to make the state in this component match always the state with the id provided
     this.route.params.flatMap((params : Params) => {
-        stateId = params['stateId'];
-        if (this.limeflow) {
-          return this.limeflow$ = new BehaviorSubject<CytoscapeFlow>(this.limeflow);
-        } else {
-          return this.limeflow$ = <BehaviorSubject<CytoscapeFlow>>this.graphService.workflow$;
-        }
-      }).filter((flow : CytoscapeFlow) => flow !== null) //filter null values
-        .subscribe((flow : CytoscapeFlow) => {
-          this.limeflow = flow;
-          this.setState(stateId);
-        }, error => {
-          console.error(`${methodTrace}limeflow$ subscription timeout (20s) ocurred. ${error}`);
-        }, () => {
-          console.info(`${methodTrace}limeflow$ subscription completed.`);
-        });
+      stateId = params['stateId'];
+      flowId = params['flowId'];
+      console.log(flowId);
+
+      this.limeflow = this.graphService.getWorkflow(flowId);
+
+      if (this.limeflow) {
+        return new BehaviorSubject<CytoscapeFlow>(this.limeflow);
+      } else {
+        return <BehaviorSubject<CytoscapeFlow>>this.graphService.getWorkflow$(flowId);
+      }
+    }).filter((flow : CytoscapeFlow) => flow !== null) //filter null values
+    .subscribe((flow : CytoscapeFlow) => {
+      this.limeflow = flow;
+      this.setState(stateId);
+    }, error => {
+      console.error(`${methodTrace}limeflow$ subscription timeout (20s) ocurred. ${error}`);
+    }, () => {
+      console.info(`${methodTrace}limeflow$ subscription completed.`);
+    });
   }
 
   /**
@@ -98,6 +101,7 @@ export class LimeStateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.limeflow$.unsubscribe();
+    let methodTrace = `${this.constructor.name} > ngOnDestroy() > `; //for debugging
+    console.info(`${methodTrace} Method called`);
   }
 }

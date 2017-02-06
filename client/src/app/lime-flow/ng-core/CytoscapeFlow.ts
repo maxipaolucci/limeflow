@@ -11,7 +11,6 @@ import CytoscapeLink from "./CytoscapeLink";
 import Status from "../../../core/Constants/ElementStatus";
 import {Subject} from "rxjs";
 import {CytoscapeEventsService} from "../services/cytoscape-events.service";
-import {CommonGraphService} from "../services/common-graph.service";
 
 
 class CytoscapeFlow extends LimeFlow {

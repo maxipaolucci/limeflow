@@ -2,3 +2,8 @@
   <h2>{{task.getName()}}</h2>
   <p>{{task.getDescription()}}</p>
 </div>
+<lime-flow [id]="'limeflow_2000'"
+           [filename]="'limeflow'"
+           [render]="true"
+           (getflow)="onGetFlow($event)">
+</lime-flow>
