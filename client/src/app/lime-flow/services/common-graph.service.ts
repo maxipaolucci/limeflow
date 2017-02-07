@@ -14,7 +14,6 @@ import Status from "../../../core/Constants/ElementStatus";
 @Injectable()
 export class CommonGraphService {
   private mockDataUrl = 'src/data';  // URL to web API
-  private nextGraphId = 1000; //the last graph id created
 
   constructor (private http: Http) {}
 
@@ -56,15 +55,5 @@ export class CommonGraphService {
    */
   static getCssStatusColor(status : number) : string {
     return CssStatusColors[Status[status]];
-  }
-
-  /**
-   * Returns the nextGraphId value and incrementes the value in 1 unit.
-   * @returns nextId : string . The next id to use in a cytoscape component container
-   */
-  getNextGraphId() : string {
-    let nextId : string = this.nextGraphId.toString();
-    this.nextGraphId += 1;
-    return nextId;
   }
 }

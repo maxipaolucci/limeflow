@@ -41,12 +41,12 @@ export class LimeStateComponent implements OnInit, OnDestroy {
       flowId = params['flowId'];
       console.log(flowId);
 
-      this.limeflow = this.graphService.getWorkflow(flowId);
+      this.limeflow = this.graphService.getFlow(flowId);
 
       if (this.limeflow) {
         return new BehaviorSubject<CytoscapeFlow>(this.limeflow);
       } else {
-        return <BehaviorSubject<CytoscapeFlow>>this.graphService.getWorkflow$(flowId);
+        return <BehaviorSubject<CytoscapeFlow>>this.graphService.getFlow$(flowId);
       }
     }).filter((flow : CytoscapeFlow) => flow !== null) //filter null values
     .subscribe((flow : CytoscapeFlow) => {

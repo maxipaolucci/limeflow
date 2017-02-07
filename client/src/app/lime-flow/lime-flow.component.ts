@@ -40,8 +40,8 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
   ngOnInit() {
     let methodTrace = `${this.constructor.name} > ngOnInit() > `; //for debugging
 
-    this.graphService.registerWorkflow(this.id, null);
-    this.getflow.emit(this.graphService.getWorkflow$(this.id)); //emit the limeflow Observable
+    this.graphService.setNewFlow(this.id, null);
+    this.getflow.emit(this.graphService.getFlow$(this.id)); //emit the limeflow Observable
     //import from file
     this.commonGraphService.importGraphJSON(this.filename)
       .map(
@@ -56,8 +56,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
           }
 
           //set the workflow to the GraphService and notify observers to the graphservice workflow$
-          console.log(this.id);
-          this.graphService.setWorkflow(this.id, flow);
+          this.graphService.updateFlow(this.id, flow);
 
           return flow;
         }

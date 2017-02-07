@@ -12,35 +12,39 @@ import {BehaviorSubject} from "rxjs/Rx";
 @Injectable()
 export class GraphService {
 
+  //a map of flow registered in the app indexed by flow id
   private flowMap : Map<string, {flow : CytoscapeFlow, flow$ : BehaviorSubject<CytoscapeFlow>}>;
-
-  private workflow : CytoscapeFlow = null;
-  private workflow$ : BehaviorSubject<CytoscapeFlow> = null;
-  private num : number = 0;
 
   constructor () {
     this.flowMap = new Map<string, {flow : CytoscapeFlow, flow$ : BehaviorSubject<CytoscapeFlow>}>();
-    //this.workflow$ = new BehaviorSubject<CytoscapeFlow>(null);
   }
 
-  getWorkflow(id : string) : CytoscapeFlow {
+  getFlow(id : string) : CytoscapeFlow {
     return this.flowMap.get(id).flow;
   }
 
-  getWorkflow$(id : string) : BehaviorSubject<CytoscapeFlow> {
+  getFlow$(id : string) : BehaviorSubject<CytoscapeFlow> {
     return this.flowMap.get(id).flow$;
   }
 
-  registerWorkflow(id : string, workflow : CytoscapeFlow) : void {
-    //this.workflow = workflow;
-    //this.workflow$.next(this.workflow);
+  /**
+   * Register a new flow and flow$ in the flowMap.
+   * @param id . The id of the new flow
+   * @param workflow . The flow.
+   */
+  setNewFlow(id : string, workflow : CytoscapeFlow) : void {
     this.flowMap.set(id, {
       flow : workflow,
       flow$ : new BehaviorSubject<CytoscapeFlow>(workflow)
     });
   }
 
-  setWorkflow(id : string, workflow : CytoscapeFlow) {
+  /**
+   * Set a new flow instance in an existent entry in the flowMap for the id provided.
+   * @param id . The id of the entry to update
+   * @param workflow . The new flow.
+   */
+  updateFlow(id : string, workflow : CytoscapeFlow) {
     let methodTrace = `${this.constructor.name} > setWorkflow() > `; //for debugging
 
     let workflowData = this.flowMap.get(id);
