@@ -30,7 +30,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
       private graphService : GraphService,
       private commonGraphService : CommonGraphService) {
 
-    this.statusColor = CommonGraphService.getCssStatusColor(Status.New);
+    this.statusColor = CommonGraphService.getUIStatusInfo(Status.New, 'color');
     this.limeflow = null;
     this.getflow = new EventEmitter<BehaviorSubject<CytoscapeFlow>>();
     this.limeflowStateIdSubscriber = null;
@@ -64,7 +64,7 @@ export class LimeFlowComponent implements OnInit, OnDestroy {
         this.limeflow = flow;
         //Subscribe to the flowStatus$ to receive updates on workflow status changes
         this.limeflowStatusSubscriber = this.limeflow.flowStatus$.subscribe((newStatus : number) => {
-          this.statusColor = CommonGraphService.getCssStatusColor(newStatus);
+          this.statusColor = CommonGraphService.getUIStatusInfo(newStatus, 'color');
         });
 
         // Subscribe to the selectedStateId Observer to receive updatos on the state clicked and show its content.

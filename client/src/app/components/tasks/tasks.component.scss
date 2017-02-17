@@ -8,6 +8,14 @@
   font-family: Consolas;
   font-size: 10px;
 
+  .task--header {
+    border-left: 20px solid;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+  }
+
 
 
   @media (max-width: $screen-xs-max) {

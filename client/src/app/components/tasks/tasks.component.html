@@ -1,9 +1,16 @@
 <div *ngIf="task">
-  <h2>{{task.getName()}}</h2>
-  <p>{{task.getDescription()}}</p>
+  <div class="task--header"
+       [ngStyle]="{
+         'border-color': getUIStatusInfo(task.getStatus(), 'color')
+       }">
+    <h2>{{task.getName()}}</h2>
+    <p>{{task.getDescription()}}</p>
+  </div>
+
+  Set status:
+  <select class="task--status-selector" [(ngModel)]="taskStatus">
+    <option *ngFor="let status of taskStatuses" [value]="appCommonService.getStatusValue(status)">
+      {{getUIStatusInfo(appCommonService.getStatusValue(status), 'label')}}
+    </option>
+  </select>
 </div>
-<lime-flow [id]="'limeflow_2000'"
-           [filename]="'limeflow'"
-           [render]="true"
-           (getflow)="onGetFlow($event)">
-</lime-flow>

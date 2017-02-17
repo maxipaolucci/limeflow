@@ -97,7 +97,7 @@ export class LimeStateComponent implements OnInit, OnDestroy {
    * @returns {string} . The Hex code as string of the status color
    */
   getCssStatusColor(status : number) : string {
-    return CommonGraphService.getCssStatusColor(status);
+    return CommonGraphService.getUIStatusInfo(status, 'color');
   }
 
   ngOnDestroy() {

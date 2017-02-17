@@ -11,6 +11,10 @@
   & /deep/ {
     font-family: $main-font-family;
     color: $main-font-color;
+
+    select {
+      background-color: $main-pink;
+    }
   }
 
   nav {

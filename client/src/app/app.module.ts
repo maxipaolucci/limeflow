@@ -16,6 +16,8 @@ import {AppRoutingModule} from "./app-routing.module";
 import {LimeFlowModule} from "./lime-flow/lime-flow.module";
 import {T1Component} from "./components/tasks/t1/t1.component";
 import {AppGraphService} from "./services/app.graph.service";
+import {AppCommonService} from "./services/app.common.service";
+import {FormsModule} from "@angular/forms";
 
 
 
@@ -25,7 +27,8 @@ import {AppGraphService} from "./services/app.graph.service";
     HttpModule,
     LimeFlowModule,
     AppRoutingModule,
-    NgReduxModule
+    NgReduxModule,
+    FormsModule
   ],
   declarations: [
     AppComponent,
@@ -36,6 +39,13 @@ import {AppGraphService} from "./services/app.graph.service";
     ResultsComponent
   ],
   bootstrap: [ AppComponent ],
-  providers: [ Title, NgReduxRouter, DevToolsExtension, VottingActions, AppGraphService ]
+  providers: [
+    Title,
+    NgReduxRouter,
+    DevToolsExtension,
+    VottingActions,
+    AppGraphService,
+    AppCommonService
+  ]
 })
 export class AppModule { }

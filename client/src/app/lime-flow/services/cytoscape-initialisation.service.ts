@@ -2,7 +2,7 @@
 
 import { Injectable }	from '@angular/core';
 
-import {CssColors, CssStatusColors}  from '../../css-colors';
+import {CssColors, UIStatusInfo}  from '../../css-colors';
 
 @Injectable()
 export class CytoscapeInitialisationService {
@@ -84,37 +84,37 @@ export class CytoscapeInitialisationService {
 			{
 				selector: "node.status-new",
 				css: {
-					'background-color': CssStatusColors.New
+					'background-color': UIStatusInfo.New.color
 				}
 			},
 			{
 				selector: "node.status-inprogress",
 				css: {
-					'background-color': CssStatusColors.InProgress
+					'background-color': UIStatusInfo.InProgress.color
 				}
 			},
 			{
 				selector: "node.status-done",
 				css: {
-					'background-color': CssStatusColors.Done
+					'background-color': UIStatusInfo.Done.color
 				}
 			},
 			{
 				selector: "node.status-complete",
 				css: {
-					'background-color': CssStatusColors.Complete
+					'background-color': UIStatusInfo.Complete.color
 				}
 			},
 			{
 				selector: "node.status-stop",
 				css: {
-					'background-color': CssStatusColors.Stop
+					'background-color': UIStatusInfo.Stop.color
 				}
 			},
 			{
 				selector: "node.status-block",
 				css: {
-					'background-color': CssStatusColors.Block
+					'background-color': UIStatusInfo.Block.color
 				}
 			},
 			{

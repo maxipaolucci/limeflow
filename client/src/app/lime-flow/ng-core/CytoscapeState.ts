@@ -24,7 +24,7 @@ class CytoscapeState extends State {
         id: this._id,
         caption: this._name,
         status: this._status,
-        cssStatusColor: CommonGraphService.getCssStatusColor(this._status),
+        cssStatusColor: CommonGraphService.getUIStatusInfo(this._status, 'color'),
         tasks : this.tasksToJSON()
       }
     };

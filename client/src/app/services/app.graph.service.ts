@@ -12,19 +12,24 @@ import CytoscapeFlow from "../lime-flow/ng-core/CytoscapeFlow";
 @Injectable()
 export class AppGraphService {
 
-  private workflow : CytoscapeFlow = null;
-  workflow$ : BehaviorSubject<CytoscapeFlow> = null;
+  private flow : CytoscapeFlow;
+  private flow$ : BehaviorSubject<CytoscapeFlow>;
 
   constructor () {
-    this.workflow$ = new BehaviorSubject<CytoscapeFlow>(null);
+    this.flow = null;
+    this.flow$ = new BehaviorSubject<CytoscapeFlow>(null);
   }
 
-  getWorkflow() : CytoscapeFlow {
-    return this.workflow;
+  getFlow() : CytoscapeFlow {
+    return this.flow;
   }
 
-  setWorkFlow(workflow : CytoscapeFlow) : void {
-    this.workflow = workflow;
-    this.workflow$.next(this.workflow);
+  getFlow$() : BehaviorSubject<CytoscapeFlow> {
+    return this.flow$;
+  }
+
+  updateFlow(flow : CytoscapeFlow) : void {
+    this.flow = flow;
+    this.flow$.next(this.flow);
   }
 }

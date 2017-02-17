@@ -31,11 +31,29 @@ export const CssColors = {
 //Node Status Color
 export type CssStatusColors = "#AAD5FF" | "#FFF06C" | "#ADFF2F" | "#CFA0FF" | "#D1CECD" | "#FF8C94";
 
-export const CssStatusColors = {
-    New : "#AAD5FF" as CssStatusColors,
-    InProgress : "#FFF06C" as CssStatusColors,
-    Done : "#ADFF2F" as CssStatusColors,
-    Complete : "#CFA0FF" as CssStatusColors,
-    Stop : "#D1CECD" as CssStatusColors,
-    Block : "#FF8C94" as CssStatusColors
+export const UIStatusInfo = {
+    New : {
+        color : "#AAD5FF" as CssStatusColors,
+        label : "New"
+    },
+    InProgress : {
+        color : "#FFF06C" as CssStatusColors,
+        label : "In Progress"
+    },
+    Done : {
+        color : "#ADFF2F" as CssStatusColors,
+        label : "Done"
+    },
+    Complete : {
+        color : "#CFA0FF" as CssStatusColors,
+        label : "Complete"
+    },
+    Stop : {
+        color : "#D1CECD" as CssStatusColors,
+        label : "Stop"
+    },
+    Block : {
+        color : "#FF8C94" as CssStatusColors,
+        label : "Block"
+    }
 };

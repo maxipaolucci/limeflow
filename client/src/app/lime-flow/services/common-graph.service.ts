@@ -4,7 +4,7 @@
 import { Injectable }	from '@angular/core';
 import {Http, Response} from "@angular/http";
 import {Observable} from "rxjs/Rx";
-import {CssStatusColors} from "../../css-colors";
+import {UIStatusInfo} from "../../css-colors";
 import Status from "../../../core/Constants/ElementStatus";
 
 
@@ -48,12 +48,14 @@ export class CommonGraphService {
   }
 
   /**
-   * Get the css status color from a Status value
+   * Get the UI status info from a Status value. The info retrieved could be filtered by key if provided
    * @param (Enum<Status>) status . The status of the node
+   * @param {string} . Optional, a key to filter the result by that field
    *
-   * @returns {string} . The hexa value of the color
+   * @returns {Object | string} . An object with UI status info if no key provided,
+   *    otherwise returns the property matching the key
    */
-  static getCssStatusColor(status : number) : string {
-    return CssStatusColors[Status[status]];
+  static getUIStatusInfo(status : number, key? : string) : string {
+    return key ? UIStatusInfo[Status[status]][key] : UIStatusInfo[Status[status]];
   }
 }

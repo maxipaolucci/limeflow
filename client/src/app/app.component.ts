@@ -1,5 +1,5 @@
 ///<reference path="../dts/cytoscape.d.ts" />
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import * as io from 'socket.io-client';
 import {NgRedux, DevToolsExtension} from 'ng2-redux';
@@ -12,7 +12,7 @@ import reduxLogger from '../model/configureLogger';
 import { __DEVMODE__ } from "../constants/config";
 import {VottingActions} from "./vottingActions.service";
 import {VottingMiddleware} from "./vottingMiddleware.service";
-import {BehaviorSubject} from "rxjs/Rx";
+import {BehaviorSubject, Subscription} from "rxjs/Rx";
 import CytoscapeFlow from "./lime-flow/ng-core/CytoscapeFlow";
 import {AppGraphService} from "./services/app.graph.service";
 
@@ -23,11 +23,12 @@ import {AppGraphService} from "./services/app.graph.service";
   styleUrls: ['./app.component.scss'],
   providers: [ VottingMiddleware ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title : string = "LimeFlow App";
   socket : any = null;
   private limeflow$ : BehaviorSubject<CytoscapeFlow>;
   private limeflow : CytoscapeFlow;
+  private limeflowSubscriber : Subscription;
   
   constructor(
     private titleService : Title,
@@ -68,15 +69,14 @@ export class AppComponent implements OnInit {
 
   ngOnDestroy() {
     //unsubscribe from observers
-    this.limeflow$.unsubscribe();
+    this.limeflowSubscriber.unsubscribe();
   }
 
   onGetFlow(limeflow$ : BehaviorSubject<CytoscapeFlow>) {
     let methodTrace = `${this.constructor.name} > onGetFlow() > `; //for debugging
-    this.limeflow$ = limeflow$;
-    this.limeflow$.subscribe(flow => {
+    this.limeflowSubscriber = limeflow$.subscribe(flow => {
       this.limeflow = flow;
-      this.appGraphService.setWorkFlow(this.limeflow);
+      this.appGraphService.updateFlow(this.limeflow);
       console.info(`${methodTrace} ${this.limeflow}`);
     });
   }
